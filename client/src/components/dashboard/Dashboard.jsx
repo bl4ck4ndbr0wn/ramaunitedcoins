@@ -73,8 +73,8 @@ class Dashboard extends Component {
                           You have not yet st up your profile, please add some
                           info.
                         </p>
-                        <Link
-                          to="/create-profile"
+                        <a
+                          href="/create-profile"
                           className="btn btn-pink btn-fix btn-animated from-left"
                         >
                           <span className="visible-content">
@@ -86,7 +86,7 @@ class Dashboard extends Component {
                               Add Info
                             </span>
                           </span>
-                        </Link>
+                        </a>
                       </div>
                     </div>
                   </div>
