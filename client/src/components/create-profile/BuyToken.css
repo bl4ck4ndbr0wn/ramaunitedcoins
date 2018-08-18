@@ -1,0 +1,31 @@
+.pointer {
+  cursor: pointer;
+}
+
+.boxdisplay {
+  text-align: center;
+  padding: 35px;
+}
+
+.widget-box-1 {
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  border: 1px solid #e5e5e5;
+}
+
+.boxdisplay span {
+  font-weight: bold;
+  font-size: 40px;
+  float: left;
+  width: 100%;
+  padding-bottom: 11px;
+  clear: both;
+}
+.widget-box-1 p {
+  margin-bottom: 0px;
+}
+.hovered-card-box {
+  /* border: 5px solid #1bb933; */
+  background: #1bb933b3;
+  color: #fff;
+}
