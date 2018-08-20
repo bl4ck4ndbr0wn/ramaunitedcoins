@@ -15,3 +15,6 @@ export const GET_TOKEN = "GET_TOKEN";
 export const GET_TOKENS = "GET_TOKENS";
 export const TOKEN_LOADING = "TOKEN_LOADING";
 export const TOKEN_NOT_FOUND = "TOKEN_NOT_FOUND";
+
+export const GET_SETTINGS = "GET_SETTINGS";
+export const SETTING_LOADING = "SETTING_LOADING";

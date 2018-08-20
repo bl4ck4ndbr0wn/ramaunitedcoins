@@ -1,21 +1,25 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import TextFieldGroup from "../../common/TextFieldGroup";
-import { createDistributions } from "../../../actions/settingActions";
-import Header from "../../layout/Header";
-import Footer from "../../layout/Footer";
-import Breadcrumb from "../../common/BreadCrumb";
+import TextFieldGroup from "../../../common/TextFieldGroup";
+import SelectListGroup from "../../../common/SelectListGroup";
+import {
+  createAccounts,
+  getSettings
+} from "../../../../actions/settingActions";
+import Header from "../../../layout/Header";
+import Footer from "../../../layout/Footer";
+import Breadcrumb from "../../../common/BreadCrumb";
+import isEmpty from "../../../../validation/is-empty";
 
-class Rounds extends Component {
+class EditAccounts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      round: "",
-      price: "",
-      bonus: "",
+      type: "",
+      address: "",
       isActive: false,
       errors: {}
     };
@@ -23,26 +27,46 @@ class Rounds extends Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
+  componentDidMount() {
+    this.props.getSettings();
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
+    if (nextProps.setting.settings) {
+      const account = nextProps.setting.settings.account;
+      const result = account.find(
+        account => account._id === this.props.match.params.id
+      );
+      // If account field doesnt exist, make empty string
+      result.address = !isEmpty(result.address) ? result.address : "";
+      result.type = !isEmpty(result.type) ? result.type : "";
+      result.isActive = !isEmpty(result.isActive) ? result.isActive : false;
+
+      // Set component fields state
+      this.setState({
+        type: result.type,
+        address: result.address,
+        isActive: result.isActive
+      });
+    }
   }
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-    console.log(this.state);
   }
   onSubmit(e) {
     e.preventDefault();
-    const distributionsData = {
-      round: this.state.round,
-      price: this.state.price,
-      bonus: this.state.bonus,
+
+    const accountData = {
+      type: this.state.type,
+      address: this.state.address,
       isActive: this.state.isActive
     };
-    this.props.createDistributions(distributionsData, this.props.history);
+
+    this.props.createAccounts(accountData, this.props.history);
   }
 
   render() {
@@ -51,52 +75,43 @@ class Rounds extends Component {
     return (
       <div className="page-wrapper">
         {/*
-<!-- START HEADER-->*/}
+    <!-- START HEADER-->*/}
         <Header />
         {/*
-<!-- END HEADER-->*/}
+    <!-- END HEADER-->*/}
         <div className="content-wrapper" style={{ minHeight: "100vh" }}>
           {/*
-  <!-- START PAGE CONTENT-->*/}
-          <Breadcrumb title="Invester Rounds" item="Settings" />
+      <!-- START PAGE CONTENT-->*/}
+          <Breadcrumb title="Company Account Setup" item="Settings" />
           <div className="page-content fade-in-up">
-            <div className="row justify-content-center">
+            <div className="row  justify-content-center">
               <div class="col-md-6">
                 <div class="ibox">
                   <div class="ibox-head">
-                    <div class="ibox-title">Invester Rounds</div>
+                    <div class="ibox-title">Company Account Setup</div>
                   </div>
                   <form class="form-info" onSubmit={this.onSubmit}>
                     <div class="ibox-body">
                       <TextFieldGroup
-                        placeholder="* Round No"
-                        type="number"
-                        name="round"
-                        label="Invester Round"
-                        value={this.state.round}
+                        placeholder="* Account Type"
+                        type="text"
+                        name="type"
+                        label="Account Type"
+                        disabled
+                        value={this.state.type}
                         onChange={this.onChange}
-                        error={errors.round}
-                        info="Data format 1"
+                        error={errors.type}
+                        info="Data format ETH Address"
                       />
                       <TextFieldGroup
-                        placeholder="* Price in $"
+                        placeholder="* Account Address"
                         type="number"
-                        name="price"
-                        label="Price per Coin"
-                        value={this.state.price}
+                        name="address"
+                        label="Account Address No."
+                        value={this.state.address}
                         onChange={this.onChange}
-                        error={errors.price}
-                        info="Data format $99.99"
-                      />
-                      <TextFieldGroup
-                        placeholder="* Bonus in %"
-                        type="number"
-                        name="bonus"
-                        label="Bonus"
-                        value={this.state.bonus}
-                        onChange={this.onChange}
-                        error={errors.bonus}
-                        info="Data format 99.99%"
+                        error={errors.address}
+                        info="Data format ETH Address"
                       />
                       <div className="form-group">
                         <input
@@ -110,14 +125,11 @@ class Rounds extends Component {
                         />
 
                         <small className="form-text text-muted">
-                          Make Round as Active.
+                          Make Default System Account Address.
                         </small>
                       </div>
                     </div>
                     <div class="ibox-footer">
-                      {/* <button class="btn btn-primary mr-2" type="submit">
-
-              </button> */}
                       <button
                         className="btn btn-primary btn-fix mr-4"
                         type="submit"
@@ -136,8 +148,9 @@ class Rounds extends Component {
   }
 }
 
-Rounds.propTypes = {
-  createDistributions: PropTypes.func.isRequired,
+EditAccounts.propTypes = {
+  createAccounts: PropTypes.func.isRequired,
+  getSettings: PropTypes.func.isRequired,
   setting: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -149,5 +162,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createDistributions }
-)(withRouter(Rounds));
+  { createAccounts, getSettings }
+)(withRouter(EditAccounts));

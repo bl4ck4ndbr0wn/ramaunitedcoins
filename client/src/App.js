@@ -26,6 +26,10 @@ import Settings from "./components/admin/settings/Index";
 import Confirmation from "./components/auth/Confirmation";
 import SendConfirmation from "./components/auth/SendConfirmation";
 import ResendConfirmation from "./components/auth/ResendConfirmation";
+import Account from "./components/admin/settings/Account";
+import Rounds from "./components/admin/settings/Rounds";
+import EditAccount from "./components/admin/settings/edit-settings/EditAccount";
+import EditRound from "./components/admin/settings/edit-settings/EditRound";
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -90,6 +94,13 @@ class App extends Component {
                   component={TransactionList}
                 />
               </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/admin/transaction/:id"
+                  component={Account}
+                />
+              </Switch>
 
               <Switch>
                 <PrivateRoute exact path="/user/:user_id" component={User} />
@@ -109,6 +120,34 @@ class App extends Component {
                   exact
                   path="/admin/settings"
                   component={Settings}
+                />
+              </Switch>
+              <Switch>
+                <AdminPrivateRoute
+                  exact
+                  path="/admin/settings/account"
+                  component={Account}
+                />
+              </Switch>
+              <Switch>
+                <AdminPrivateRoute
+                  exact
+                  path="/admin/settings/edit-account/:id"
+                  component={EditAccount}
+                />
+              </Switch>
+              <Switch>
+                <AdminPrivateRoute
+                  exact
+                  path="/admin/settings/rounds"
+                  component={Rounds}
+                />
+              </Switch>
+              <Switch>
+                <AdminPrivateRoute
+                  exact
+                  path="/admin/settings/edit-round/:id"
+                  component={EditRound}
                 />
               </Switch>
             </div>

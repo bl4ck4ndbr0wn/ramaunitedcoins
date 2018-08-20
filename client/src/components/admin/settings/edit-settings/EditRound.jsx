@@ -3,13 +3,17 @@ import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import TextFieldGroup from "../../common/TextFieldGroup";
-import { createDistributions } from "../../../actions/settingActions";
-import Header from "../../layout/Header";
-import Footer from "../../layout/Footer";
-import Breadcrumb from "../../common/BreadCrumb";
+import TextFieldGroup from "../../../common/TextFieldGroup";
+import {
+  createDistributions,
+  getSettings
+} from "../../../../actions/settingActions";
+import Header from "../../../layout/Header";
+import Footer from "../../../layout/Footer";
+import Breadcrumb from "../../../common/BreadCrumb";
+import isEmpty from "../../../../validation/is-empty";
 
-class Rounds extends Component {
+class EditRounds extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,18 +28,41 @@ class Rounds extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.props.getSettings();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
+    }
+    if (nextProps.setting.settings) {
+      const round = nextProps.setting.settings.round;
+      const result = round.find(
+        round => round._id === this.props.match.params.id
+      );
+      // If round field doesnt exist, make empty string
+      result.round = !isEmpty(result.round) ? result.round : "";
+      result.price = !isEmpty(result.price) ? result.price : "";
+      result.bonus = !isEmpty(result.bonus) ? result.bonus : "";
+      result.isActive = !isEmpty(result.isActive) ? result.isActive : false;
+
+      // Set component fields state
+      this.setState({
+        round: result.round,
+        price: result.price,
+        bonus: result.bonus,
+        isActive: result.isActive
+      });
     }
   }
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-    console.log(this.state);
   }
   onSubmit(e) {
     e.preventDefault();
+
     const distributionsData = {
       round: this.state.round,
       price: this.state.price,
@@ -136,8 +163,9 @@ class Rounds extends Component {
   }
 }
 
-Rounds.propTypes = {
+EditRounds.propTypes = {
   createDistributions: PropTypes.func.isRequired,
+  getSettings: PropTypes.func.isRequired,
   setting: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -149,5 +177,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { createDistributions }
-)(withRouter(Rounds));
+  { createDistributions, getSettings }
+)(withRouter(EditRounds));

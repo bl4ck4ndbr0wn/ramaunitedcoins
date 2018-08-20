@@ -7,8 +7,10 @@ import Header from "../layout/Header";
 import Footer from "../layout/Footer";
 import TextFieldGroup from "../common/TextFieldGroup";
 import { createToken } from "../../actions/tokenActions";
+import { getSettings } from "../../actions/settingActions";
 import Breadcrumb from "../common/BreadCrumb";
 import SelectListGroup from "../common/SelectListGroup";
+import isEmpty from "../../validation/is-empty";
 
 class BuyToken extends Component {
   constructor(props) {
@@ -16,6 +18,9 @@ class BuyToken extends Component {
     this.state = {
       modetransfer: "",
       amount: "",
+      address: "",
+      price: "",
+      bonus: "",
       errors: {}
     };
 
@@ -23,9 +28,31 @@ class BuyToken extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.props.getSettings();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
+    }
+    if (nextProps.setting.settings) {
+      const setting = nextProps.setting.settings;
+      const account = setting.account.find(
+        account => account.isActive === true
+      );
+      const round = setting.round.find(round => round.isActive === true);
+      // If account field doesnt exist, make empty string
+      account.address = !isEmpty(account.address) ? account.address : "";
+      // If round field doesnt exist, make empty string
+      round.address = !isEmpty(round.address) ? round.address : "";
+
+      // Set component fields state
+      this.setState({
+        address: account.address,
+        price: round.price,
+        bonus: round.bonus
+      });
     }
   }
 
@@ -44,7 +71,7 @@ class BuyToken extends Component {
   }
 
   render() {
-    const { errors } = this.state;
+    const { errors, amount, price, bonus } = this.state;
 
     // Select options for status
     const options = [
@@ -55,6 +82,27 @@ class BuyToken extends Component {
       { label: "LTC", value: "LTC", icon: "ti-wallet" },
       { label: "BCH", value: "BCH", icon: "ti-wallet" }
     ];
+
+    let ConvertedAmout;
+
+    if (isEmpty(amount)) {
+      ConvertedAmout = "";
+    } else {
+      let rcc = amount / price;
+      let ruc = amount * bonus;
+
+      // RCC coin
+      // 75% bonus of the RUC = 15,000 RUC
+      ConvertedAmout = (
+        <TextFieldGroup
+          placeholder="Amount and Bonus in RCC and RUC"
+          type="text"
+          disabled="disabled"
+          name="Camount"
+          value={`${rcc} RCC Coin and ${ruc} RUC Bonus.`}
+        />
+      );
+    }
 
     return (
       <div className="page-wrapper">
@@ -93,9 +141,8 @@ class BuyToken extends Component {
                         <TextFieldGroup
                           placeholder="* Amount in $"
                           type="number"
-                          name="amount"
-                          value="032863897126438726497862317648927634762834213"
-                          error={errors.amount}
+                          name="address"
+                          value={this.state.address}
                           disabled="disabled"
                           info="bank in to this company Ethereum address."
                         />
@@ -110,8 +157,10 @@ class BuyToken extends Component {
                         value={this.state.amount}
                         onChange={this.onChange}
                         error={errors.amount}
-                        info="Data format $99.99"
+                        info="Allows onlu whole numbers $99"
                       />
+
+                      {ConvertedAmout}
                     </div>
                     <div
                       className="ibox-footer"
@@ -151,15 +200,18 @@ class BuyToken extends Component {
 
 BuyToken.propTypes = {
   createToken: PropTypes.func.isRequired,
+  getSettings: PropTypes.func.isRequired,
   token: PropTypes.object.isRequired,
+  setting: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   token: state.token,
-  errors: state.errors
+  errors: state.errors,
+  setting: state.setting
 });
 export default connect(
   mapStateToProps,
-  { createToken }
+  { createToken, getSettings }
 )(withRouter(BuyToken));

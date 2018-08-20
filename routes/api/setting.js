@@ -2,8 +2,10 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
-// Setting model
-const Setting = require("../../models/Setting");
+// Round model
+const Round = require("../../models/Round");
+// Account model
+const Account = require("../../models/Account");
 
 // Load Validation
 const validateRoundInput = require("../../validation/round");
@@ -36,10 +38,27 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   authorize("admin"),
   (req, res) => {
-    Setting.find()
-      .then(setting => res.json(posts))
+    Account.find()
+      .then(account => {
+        if (!account) {
+          errors.noaccount = "There are no account";
+          return res.status(404).json(errors);
+        }
+
+        Round.find()
+          .then(round => {
+            if (!round) {
+              errors.noround = "There are no Rounds";
+              return res.status(404).json(errors);
+            }
+            res.json({ account, round });
+          })
+          .catch(err =>
+            res.status(404).json({ noroundsfound: "No Round found" })
+          );
+      })
       .catch(err =>
-        res.status(404).json({ nosettingsfound: "No Settings found" })
+        res.status(404).json({ noaccountsfound: "No accounts found" })
       );
   }
 );
@@ -66,8 +85,30 @@ router.post(
     accountFields.user = req.user.id;
     if (req.body.type) accountFields.type = req.body.type;
     if (req.body.address) accountFields.address = req.body.address;
+    if (req.body.isActive) accountFields.isActive = req.body.isActive;
 
-    res.json(accountFields);
+    // Add to accounts array
+    Account.findOne({ type: req.body.type }).then(account => {
+      if (account) {
+        //update
+        Account.findOneAndUpdate(
+          { type: req.body.type },
+          { $set: accountFields },
+          { new: true }
+        ).then(account => {
+          res.json(account);
+        });
+      } else {
+        console.log(account);
+        //Create account
+        new Account(accountFields)
+          .save()
+          .then(account => res.json(account))
+          .catch(err =>
+            res.statusCode(404).send({ msg: "Unable to Save Account." })
+          );
+      }
+    });
   }
 );
 
@@ -94,8 +135,29 @@ router.post(
     if (req.body.round) roundFields.round = req.body.round;
     if (req.body.price) roundFields.price = req.body.price;
     if (req.body.bonus) roundFields.bonus = req.body.bonus;
+    if (req.body.isActive) roundFields.isActive = req.body.isActive;
 
-    res.json(roundFields);
+    // Add to accounts array
+    Round.findOne({ round: req.body.round }).then(round => {
+      if (round) {
+        //update
+        Round.findOneAndUpdate(
+          { round: req.body.round },
+          { $set: roundFields },
+          { new: true }
+        ).then(round => {
+          res.json(round);
+        });
+      } else {
+        //Create round
+        new Round(roundFields)
+          .save()
+          .then(round => res.json(round))
+          .catch(err =>
+            res.statusCode(404).send({ msg: "Unable to Save Round." })
+          );
+      }
+    });
   }
 );
 

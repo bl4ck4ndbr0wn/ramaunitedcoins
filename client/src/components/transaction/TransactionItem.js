@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Moment from "react-moment";
+import { Link } from "react-router-dom";
 
 export default class TransactionItem extends Component {
   render() {
@@ -24,6 +25,14 @@ export default class TransactionItem extends Component {
           <Moment format="DD.MM.YYYY">{token.date}</Moment>
         </td>
         <td>
+          <Link
+            to={`/admin/transaction/${token._id}`}
+            className="btn btn-light"
+          >
+            <i className="fa fa-edit" />
+          </Link>
+        </td>
+        <td>
           <a class="text-muted font-16" href="javascript:;">
             <i class="ti-trash" />
           </a>
@@ -41,6 +50,7 @@ export default class TransactionItem extends Component {
               <th>Status</th>
               <th>Document</th>
               <th>Date</th>
+              <th class="no-sort" />
               <th class="no-sort" />
             </tr>
           </thead>
