@@ -25,12 +25,12 @@ const Navigation = ({ users }) => {
         </Link>
       </div>
       <div className="d-flex">
-        <Link className="mega-toolbar-item" to="/admin/transactions">
+        <Link className="mega-toolbar-item" to="/transactions">
           <div className="item-icon">
             <i className="ti-file" />
           </div>
           <div className="item-name">Transaction</div>
-          <div className="item-text">COnfirm Payments.</div>
+          <div className="item-text">Confirm Payments.</div>
           <div className="item-details">Confirm</div>
         </Link>
       </div>

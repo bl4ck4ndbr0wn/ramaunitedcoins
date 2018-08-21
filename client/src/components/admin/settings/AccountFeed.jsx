@@ -6,30 +6,43 @@ import Moment from "react-moment";
 
 class AccountFeed extends Component {
   render() {
-    const accounts = this.props.account.map(account => (
-      <tr key={account._id}>
-        <td>{account.type}</td>
-        <td>{account.address}</td>
-        <td>
-          <Moment format="YYYY/MM/DD">{account.date}</Moment>
-        </td>
-        <td>{account.isActive ? "Active" : "Deactivated"}</td>
-        <td>
+    let accounts;
+    if (Object.keys(this.props.account).length > 0) {
+      accounts = this.props.account.map(account => (
+        <tr key={account._id}>
+          <td>{account.type}</td>
+          <td>{account.address}</td>
+          <td>
+            <Moment format="YYYY/MM/DD">{account.date}</Moment>
+          </td>
+          <td>{account.isActive ? "Active" : "Deactivated"}</td>
+          <td>
+            <Link
+              to={`/admin/settings/edit-account/${account._id}`}
+              className="btn btn-light"
+            >
+              <i className="fa fa-edit" />
+            </Link>
+          </td>
+        </tr>
+      ));
+    } else {
+      accounts = (
+        <div>
           <Link
-            to={`/admin/settings/edit-account/${account._id}`}
-            className="btn btn-light"
+            to="/admin/settings/account"
+            className="m-4 btn btn-primary justify-content-center"
           >
-            <i className="fa fa-edit" />
+            New Account
           </Link>
-        </td>
-      </tr>
-    ));
-
+        </div>
+      );
+    }
     return (
       <div class="col-md-6">
         <div class="ibox">
           <div class="ibox-head">
-            <div class="ibox-title">Responsive Table</div>
+            <div class="ibox-title">Company Accounts.</div>
           </div>
           <div class="ibox-body">
             <div class="table-responsive">

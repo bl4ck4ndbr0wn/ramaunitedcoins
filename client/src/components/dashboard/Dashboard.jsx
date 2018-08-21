@@ -40,21 +40,13 @@ class Dashboard extends Component {
         if (Object.keys(profile).length > 0) {
           dashboardContent = (
             <div>
-              {tokens == null || loading ? (
-                <Spinner />
-              ) : (
-                <DHeader tokens={tokens} />
-              )}
+              {tokens == null || loading ? "" : <DHeader tokens={tokens} />}
               <CardUser
                 user={user}
                 profile={profile}
                 onDeleteClick={this.onDeleteClick.bind(this)}
               />
-              {tokens == null || loading ? (
-                <Spinner />
-              ) : (
-                <Transaction tokens={tokens} />
-              )}
+              {tokens == null || loading ? "" : <Transaction tokens={tokens} />}
             </div>
           );
         } else {

@@ -56,7 +56,39 @@ router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Token.find({ user: req.user.id })
+    if (req.user.role === "admin") {
+      User.findOne({ role: req.user.role })
+        .then(user => {
+          if (user) {
+            Token.find()
+              .sort({ date: -1 })
+              .then(token => res.json(token))
+              .catch(err =>
+                res.status(404).json({ notokensfound: "No Requests found" })
+              );
+          } else {
+            Token.find({ user: req.user.id })
+              .sort({ date: -1 })
+              .then(token => res.json(token))
+              .catch(err =>
+                res.status(404).json({ notokensfound: "No Requests found" })
+              );
+          }
+        })
+        .catch(err => res.status(404).json({ nouserfound: "No User found" }));
+    }
+  }
+);
+
+// @route   POST api/token/admin
+// @desc    Confirm payment
+// @access  Private (admin)
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  authorize("admin"),
+  (req, res) => {
+    Token.find()
       .sort({ date: -1 })
       .then(token => res.json(token))
       .catch(err =>

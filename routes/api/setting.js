@@ -36,7 +36,6 @@ router.get(
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
-  authorize("admin"),
   (req, res) => {
     Account.find()
       .then(account => {

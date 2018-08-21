@@ -6,31 +6,46 @@ import Moment from "react-moment";
 
 class RoundFeed extends Component {
   render() {
-    const rounds = this.props.round.map(round => (
-      <tr key={round._id}>
-        <td>{round.round}</td>
-        <td>{round.price}</td>
-        <td>{round.bonus}</td>
-        <td>
-          <Moment format="YYYY/MM/DD">{round.date}</Moment>
-        </td>
-        <td>{round.isActive ? "Active" : "Deactivated"}</td>
-        <td>
+    let rounds;
+
+    if (Object.keys(this.props.round).length > 0) {
+      rounds = this.props.round.map(round => (
+        <tr key={round._id}>
+          <td>{round.round}</td>
+          <td>{round.price}</td>
+          <td>{round.bonus}</td>
+          <td>
+            <Moment format="YYYY/MM/DD">{round.date}</Moment>
+          </td>
+          <td>{round.isActive ? "Active" : "Deactivated"}</td>
+          <td>
+            <Link
+              to={`/admin/settings/edit-round/${round._id}`}
+              className="btn btn-light"
+            >
+              <i className="fa fa-edit" />
+            </Link>
+          </td>
+        </tr>
+      ));
+    } else {
+      rounds = (
+        <div>
           <Link
-            to={`/admin/settings/edit-round/${round._id}`}
-            className="btn btn-light"
+            to="/admin/settings/rounds"
+            className="m-4 btn btn-primary justify-content-center"
           >
-            <i className="fa fa-edit" />
+            New Investor Round
           </Link>
-        </td>
-      </tr>
-    ));
+        </div>
+      );
+    }
 
     return (
       <div class="col-md-6">
         <div class="ibox">
           <div class="ibox-head">
-            <div class="ibox-title">Responsive Table</div>
+            <div class="ibox-title">Investor Rounds</div>
           </div>
           <div class="ibox-body">
             <div class="table-responsive">
