@@ -65,6 +65,31 @@ router.get(
   }
 );
 
+// @route   GET api/token/:id
+// @desc    GET token information
+// @access  Private
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Token.findById(req.params.id)
+      .then(token => {
+        // Check for token owner
+        if (
+          token.user.toString() !== req.user.id ||
+          req.user.role !== "admin"
+        ) {
+          return res.status(401).json({ notauthorized: "User not authorized" });
+        }
+
+        Profile.findOne({ user: token.user.toString() }).then(profile => {
+          res.json({ token, profile });
+        });
+      })
+      .catch(err => res.status(404).json({ tokennotfound: "No Token found" }));
+  }
+);
+
 // @route   POST api/token
 // @desc    Request Token
 // @access  Private
@@ -134,11 +159,8 @@ router.post(
       return res.status(400).json(errors);
     }
 
-    res.json(req.files);
-
     Token.findById(req.params.id)
       .then(token => {
-        req.json(req.files);
         req.files.map(file => {
           const documentFields = {
             originalname: file.originalname,

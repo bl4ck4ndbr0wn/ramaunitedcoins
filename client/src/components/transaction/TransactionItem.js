@@ -27,15 +27,10 @@ export default class TransactionItem extends Component {
         <td>
           <Link
             to={`/admin/transaction/${token._id}`}
-            className="btn btn-light"
+            lass="text-muted font-16"
           >
             <i className="fa fa-edit" />
           </Link>
-        </td>
-        <td>
-          <a class="text-muted font-16" href="javascript:;">
-            <i class="ti-trash" />
-          </a>
         </td>
       </tr>
     ));
@@ -50,7 +45,6 @@ export default class TransactionItem extends Component {
               <th>Status</th>
               <th>Document</th>
               <th>Date</th>
-              <th class="no-sort" />
               <th class="no-sort" />
             </tr>
           </thead>

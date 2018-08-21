@@ -1,8 +1,14 @@
-import { GET_TOKEN, GET_TOKENS, TOKEN_LOADING } from "../actions/types";
+import {
+  GET_TOKEN,
+  GET_TOKEN_DESC,
+  GET_TOKENS,
+  TOKEN_LOADING
+} from "../actions/types";
 
 const initialState = {
   token: null,
   tokens: null,
+  token_desc: null,
   loading: false
 };
 
@@ -17,6 +23,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         token: action.payload,
+        loading: false
+      };
+    case GET_TOKEN_DESC:
+      return {
+        ...state,
+        token_desc: action.payload,
         loading: false
       };
     case GET_TOKENS:

@@ -18,3 +18,4 @@ export const TOKEN_NOT_FOUND = "TOKEN_NOT_FOUND";
 
 export const GET_SETTINGS = "GET_SETTINGS";
 export const SETTING_LOADING = "SETTING_LOADING";
+export const GET_TOKEN_DESC = "GET_TOKEN_DESC";

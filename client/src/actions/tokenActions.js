@@ -1,6 +1,12 @@
 import axios from "axios";
 
-import { GET_TOKENS, GET_TOKEN, TOKEN_LOADING, GET_ERRORS } from "./types";
+import {
+  GET_TOKENS,
+  GET_TOKEN_DESC,
+  GET_TOKEN,
+  TOKEN_LOADING,
+  GET_ERRORS
+} from "./types";
 
 // TOKEN loading
 export const setTokenLoading = () => {
@@ -9,7 +15,7 @@ export const setTokenLoading = () => {
   };
 };
 
-// Get current profile
+// Get current Token
 export const getCurrentTokens = () => dispatch => {
   dispatch(setTokenLoading());
   axios
@@ -55,6 +61,25 @@ export const documentUpload = (imageUpload, id, history) => dispatch => {
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
+      })
+    );
+};
+
+// Get current Token
+export const getTokenDescription = id => dispatch => {
+  dispatch(setTokenLoading());
+  axios
+    .get(`/api/token/${id}`)
+    .then(res =>
+      dispatch({
+        type: GET_TOKEN_DESC,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_TOKEN_DESC,
+        payload: {}
       })
     );
 };

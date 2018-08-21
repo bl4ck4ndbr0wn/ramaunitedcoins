@@ -30,6 +30,7 @@ import Account from "./components/admin/settings/Account";
 import Rounds from "./components/admin/settings/Rounds";
 import EditAccount from "./components/admin/settings/edit-settings/EditAccount";
 import EditRound from "./components/admin/settings/edit-settings/EditRound";
+import ConfirmTransaction from "./components/admin/transactions/ConfirmTransaction";
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -98,7 +99,7 @@ class App extends Component {
                 <PrivateRoute
                   exact
                   path="/admin/transaction/:id"
-                  component={Account}
+                  component={ConfirmTransaction}
                 />
               </Switch>
 
