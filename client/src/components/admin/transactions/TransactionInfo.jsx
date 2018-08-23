@@ -19,27 +19,27 @@ class TransactionInfo extends Component {
     else if (token.modetransfer === "ETH") (image = eth), (symbol = "ETH");
 
     return (
-      <div class="col-xl-5">
-        <div class="ibox">
-          <div class="ibox-body">
-            <h5 class="font-strong mb-4">Transaction Information</h5>
-            <div class="row align-items-center mb-3">
-              <div class="col-4 text-light">Total Price</div>
-              <div class="col-8 h3 font-strong text-pink mb-0">
+      <div className="col-xl-5">
+        <div className="ibox">
+          <div className="ibox-body">
+            <h5 className="font-strong mb-4">Transaction Information</h5>
+            <div className="row align-items-center mb-3">
+              <div className="col-4 text-light">Total Price</div>
+              <div className="col-8 h3 font-strong text-pink mb-0">
                 $ {token.amount}
               </div>
             </div>
-            <div class="row align-items-center mb-3">
-              <div class="col-4 text-light">Date</div>
-              <div class="col-8">
+            <div className="row align-items-center mb-3">
+              <div className="col-4 text-light">Date</div>
+              <div className="col-8">
                 <Moment format="YYYY.MM.DD">{token.date}</Moment>
               </div>
             </div>
-            <div class="row align-items-center mb-3">
-              <div class="col-4 text-light">Status</div>
-              <div class="col-8">
+            <div className="row align-items-center mb-3">
+              <div className="col-4 text-light">Status</div>
+              <div className="col-8">
                 <span
-                  class={`badge badge-${
+                  className={`badge badge-${
                     token.confirmed ? "success" : "info"
                   } badge-pill`}
                 >
@@ -47,28 +47,28 @@ class TransactionInfo extends Component {
                 </span>
               </div>
             </div>
-            <div class="row align-items-center">
-              <div class="col-4 text-light">Payment</div>
-              <div class="col-8">
+            <div className="row align-items-center">
+              <div className="col-4 text-light">Payment</div>
+              <div className="col-8">
                 <img src={image} alt={symbol} width="55" /> {symbol}
               </div>
             </div>
           </div>
         </div>
-        <div class="ibox">
-          <div class="ibox-body">
-            <h5 class="font-strong mb-4">Buyer Information</h5>
-            <div class="row align-items-center mb-3">
-              <div class="col-4 text-light">Customer</div>
-              <div class="col-8">{user.handle}</div>
+        <div className="ibox">
+          <div className="ibox-body">
+            <h5 className="font-strong mb-4">Buyer Information</h5>
+            <div className="row align-items-center mb-3">
+              <div className="col-4 text-light">Customer</div>
+              <div className="col-8">{user.handle}</div>
             </div>
-            <div class="row align-items-center mb-3">
-              <div class="col-4 text-light">Address</div>
-              <div class="col-8">{user.country}</div>
+            <div className="row align-items-center mb-3">
+              <div className="col-4 text-light">Address</div>
+              <div className="col-8">{user.country}</div>
             </div>
-            <div class="row align-items-center">
-              <div class="col-4 text-light">Phone</div>
-              <div class="col-8">{user.telephone}</div>
+            <div className="row align-items-center">
+              <div className="col-4 text-light">Phone</div>
+              <div className="col-8">{user.telephone}</div>
             </div>
           </div>
         </div>

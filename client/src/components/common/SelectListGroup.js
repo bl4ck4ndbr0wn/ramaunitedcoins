@@ -19,7 +19,7 @@ const SelectListGroup = ({ name, value, error, info, onChange, options }) => {
         className={classnames("form-control", {
           "is-invalid": error
         })}
-        tabindex="-98"
+        tabIndex="-98"
         name={name}
         value={value}
         onChange={onChange}
@@ -29,7 +29,7 @@ const SelectListGroup = ({ name, value, error, info, onChange, options }) => {
       {/* <select
         className="selectpicker form-control"
         data-selected-text-format="count"
-        tabindex="-98"
+        tabIndex="-98"
         name={name}
         value={value}
         onChange={onChange}

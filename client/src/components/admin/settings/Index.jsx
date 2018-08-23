@@ -29,7 +29,7 @@ class Settings extends Component {
       // Checking if settings has data
       if (Object.keys(settings).length > 0) {
         settingContent = (
-          <div class="row">
+          <div className="row">
             <RoundFeed round={settings.round} />
             <AccountFeed account={settings.account} />
           </div>
@@ -37,50 +37,56 @@ class Settings extends Component {
       } else {
         settingContent = (
           <div>
-            <div class="col-md-6">
-              <div class="ibox">
-                <div class="ibox-head">
-                  <div class="ibox-title">Invester Rounds</div>
-                  <div class="ibox-tools">
-                    <a class="ibox-collapse">
-                      <i class="ti-angle-down" />
+            <div className="col-md-6">
+              <div className="ibox">
+                <div className="ibox-head">
+                  <div className="ibox-title">Invester Rounds</div>
+                  <div className="ibox-tools">
+                    <a className="ibox-collapse">
+                      <i className="ti-angle-down" />
                     </a>
-                    <a class="dropdown-toggle" data-toggle="dropdown">
-                      <i class="ti-more-alt" />
+                    <a className="dropdown-toggle" data-toggle="dropdown">
+                      <i className="ti-more-alt" />
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <Link to="/admin/settings/rounds" class="dropdown-item">
+                    <div className="dropdown-menu dropdown-menu-right">
+                      <Link
+                        to="/admin/settings/rounds"
+                        className="dropdown-item"
+                      >
                         {" "}
-                        <i class="ti-pencil-alt" />
+                        <i className="ti-pencil-alt" />
                         Edit
                       </Link>
                     </div>
                   </div>
                 </div>
-                <div class="ibox-body">No Data Found.</div>
+                <div className="ibox-body">No Data Found.</div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="ibox">
-                <div class="ibox-head">
-                  <div class="ibox-title">Company Accounts</div>
-                  <div class="ibox-tools">
-                    <a class="ibox-collapse">
-                      <i class="ti-angle-down" />
+            <div className="col-md-6">
+              <div className="ibox">
+                <div className="ibox-head">
+                  <div className="ibox-title">Company Accounts</div>
+                  <div className="ibox-tools">
+                    <a className="ibox-collapse">
+                      <i className="ti-angle-down" />
                     </a>
-                    <a class="dropdown-toggle" data-toggle="dropdown">
-                      <i class="ti-more-alt" />
+                    <a className="dropdown-toggle" data-toggle="dropdown">
+                      <i className="ti-more-alt" />
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <Link to="/admin/settings/account" class="dropdown-item">
+                    <div className="dropdown-menu dropdown-menu-right">
+                      <Link
+                        to="/admin/settings/account"
+                        className="dropdown-item"
+                      >
                         {" "}
-                        <i class="ti-pencil-alt" />
+                        <i className="ti-pencil-alt" />
                         Edit
                       </Link>
                     </div>
                   </div>
                 </div>
-                <div class="ibox-body">No Data Found.</div>
+                <div className="ibox-body">No Data Found.</div>
               </div>
             </div>
           </div>

@@ -68,17 +68,17 @@ class ResendConfirmation extends Component {
     }
 
     return (
-      <div class="jumbotron text-xs-center text-center">
+      <div className="jumbotron text-xs-center text-center">
         <img src={rama} alt="Rama logo" style={{ marginBottom: "3rem" }} />
-        <h1 class="display-3">Confirm Account!</h1>
-        <p class="lead">
+        <h1 className="display-3">Confirm Account!</h1>
+        <p className="lead">
           <strong>Please check your email</strong> for further instructions on
           how to complete your account setup.
         </p>
         <hr />
         <div className="d-flex justify-content-around">
-          <p class="lead">
-            <Link class="btn btn-primary btn-sm" to="/" role="button">
+          <p className="lead">
+            <Link className="btn btn-primary btn-sm" to="/" role="button">
               Continue to homepage
             </Link>
           </p>

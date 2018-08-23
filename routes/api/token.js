@@ -101,7 +101,7 @@ router.get(
 // @desc    GET token information
 // @access  Private
 router.get(
-  "/:id",
+  "/detail/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Token.findById(req.params.id)
@@ -172,6 +172,32 @@ router.delete(
           res.status(404).json({ tokennotfound: "No Token found" })
         );
     });
+  }
+);
+
+//@route POST api/token/confirm/:id
+// @desc    Confirm payment
+// @access  Private(admin)
+router.post(
+  "/confirm/:id",
+  passport.authenticate("jwt", { session: false }),
+  authorize("admin"),
+  (req, res) => {
+    Token.findById(req.params.id)
+      .then(token => {
+        // Check if already confirmed
+        if (token.confirmed) {
+          con;
+          token.confirmed = false;
+
+          token.save().then(tokens => res.json(tokens));
+        } else {
+          token.confirmed = true;
+
+          token.save().then(tokens => res.json(tokens));
+        }
+      })
+      .catch(err => res.status(404).json({ tokennotfound: "No Token found" }));
   }
 );
 

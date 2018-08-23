@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import { getTokenDescription } from "../../../actions/tokenActions";
 import Header from "../../layout/Header";
-import Breadcrumb from "../../common/BreadCrumb";
+import isEmpty from "../../../validation/is-empty";
 import Footer from "../../layout/Footer";
 import Spinner from "../../common/Spinner";
 import TransactionInfo from "./TransactionInfo";
@@ -27,16 +27,13 @@ class ConfirmTransaction extends Component {
     const { token_desc, loading } = this.props.token;
     let transactionDesc;
 
-    if (token_desc === null || loading) {
+    if (loading || isEmpty(token_desc)) {
       transactionDesc = <Spinner />;
     } else {
       transactionDesc = (
-        <div class="row">
-          <div class="col-xl-7">
-            <DocumentList
-              token={token_desc.token}
-              documents={token_desc.token.document}
-            />
+        <div className="row">
+          <div className="col-xl-7">
+            <DocumentList token={token_desc.token} />
           </div>
           <TransactionInfo user={token_desc.profile} token={token_desc.token} />
         </div>
@@ -55,13 +52,13 @@ class ConfirmTransaction extends Component {
       <!-- START PAGE CONTENT-->*/}
 
           <div className="page-content fade-in-up">
-            <div class="d-flex align-items-center mb-5">
-              <span class="mr-4 static-badge badge-pink">
-                <i class="fa fa-exchange" />
+            <div className="d-flex align-items-center mb-5">
+              <span className="mr-4 static-badge badge-pink">
+                <i className="fa fa-exchange" />
               </span>
               <div>
-                <h5 class="font-strong">Transaction #1253</h5>
-                <div class="text-light">On, 17.05.2018</div>
+                <h5 className="font-strong">Transaction #1253</h5>
+                <div className="text-light">On, 17.05.2018</div>
               </div>
             </div>
             {transactionDesc}

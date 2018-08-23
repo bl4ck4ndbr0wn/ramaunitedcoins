@@ -30,10 +30,10 @@ class Confirmation extends Component {
       if (user.isVerified) this.props.history.push("/");
     }
     return (
-      <div class="jumbotron text-xs-center text-center">
+      <div className="jumbotron text-xs-center text-center">
         <img src={rama} alt="Rama logo" style={{ marginBottom: "3rem" }} />
-        <h1 class="display-3">Verify Email</h1>
-        <p class="lead">
+        <h1 className="display-3">Verify Email</h1>
+        <p className="lead">
           <strong>Please click Verify</strong> to complete your account setup.
         </p>
         <div className="mb-3">
@@ -45,8 +45,8 @@ class Confirmation extends Component {
             Verify Email
           </button>
         </div>
-        <p class="lead">
-          <Link class="btn btn-light btn-sm" to="/" role="button">
+        <p className="lead">
+          <Link className="btn btn-light btn-sm" to="/" role="button">
             Continue to homepage
           </Link>
         </p>

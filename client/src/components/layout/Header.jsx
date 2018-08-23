@@ -128,7 +128,7 @@ class Header extends Component {
 
           <ul className="nav navbar-toolbar">
             <span
-              class="text-white pb-1 d-inline-block mr-4"
+              className="text-white pb-1 d-inline-block mr-4"
               style={{ borderBottom: "2px solid" }}
             >
               RCC Balance: 1230.00 RCC

@@ -61,13 +61,13 @@ class Rounds extends Component {
           <Breadcrumb title="Invester Rounds" item="Settings" />
           <div className="page-content fade-in-up">
             <div className="row justify-content-center">
-              <div class="col-md-6">
-                <div class="ibox">
-                  <div class="ibox-head">
-                    <div class="ibox-title">Invester Rounds</div>
+              <div className="col-md-6">
+                <div className="ibox">
+                  <div className="ibox-head">
+                    <div className="ibox-title">Invester Rounds</div>
                   </div>
-                  <form class="form-info" onSubmit={this.onSubmit}>
-                    <div class="ibox-body">
+                  <form className="form-info" onSubmit={this.onSubmit}>
+                    <div className="ibox-body">
                       <TextFieldGroup
                         placeholder="* Round No"
                         type="number"
@@ -114,8 +114,8 @@ class Rounds extends Component {
                         </small>
                       </div>
                     </div>
-                    <div class="ibox-footer">
-                      {/* <button class="btn btn-primary mr-2" type="submit">
+                    <div className="ibox-footer">
+                      {/* <button className="btn btn-primary mr-2" type="submit">
 
               </button> */}
                       <button

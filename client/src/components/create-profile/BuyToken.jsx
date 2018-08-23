@@ -143,6 +143,7 @@ class BuyToken extends Component {
                           type="number"
                           name="address"
                           value={this.state.address}
+                          onChange={this.onChange}
                           disabled="disabled"
                           info="bank in to this company Ethereum address."
                         />

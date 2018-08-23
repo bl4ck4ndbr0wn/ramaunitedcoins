@@ -42,14 +42,14 @@ class RoundFeed extends Component {
     }
 
     return (
-      <div class="col-md-6">
-        <div class="ibox">
-          <div class="ibox-head">
-            <div class="ibox-title">Investor Rounds</div>
+      <div className="col-md-6">
+        <div className="ibox">
+          <div className="ibox-head">
+            <div className="ibox-title">Investor Rounds</div>
           </div>
-          <div class="ibox-body">
-            <div class="table-responsive">
-              <table class="table">
+          <div className="ibox-body">
+            <div className="table-responsive">
+              <table className="table">
                 <thead>
                   <tr>
                     <th>Round</th>

@@ -85,13 +85,13 @@ class EditAccounts extends Component {
           <Breadcrumb title="Company Account Setup" item="Settings" />
           <div className="page-content fade-in-up">
             <div className="row  justify-content-center">
-              <div class="col-md-6">
-                <div class="ibox">
-                  <div class="ibox-head">
-                    <div class="ibox-title">Company Account Setup</div>
+              <div className="col-md-6">
+                <div className="ibox">
+                  <div className="ibox-head">
+                    <div className="ibox-title">Company Account Setup</div>
                   </div>
-                  <form class="form-info" onSubmit={this.onSubmit}>
-                    <div class="ibox-body">
+                  <form className="form-info" onSubmit={this.onSubmit}>
+                    <div className="ibox-body">
                       <TextFieldGroup
                         placeholder="* Account Type"
                         type="text"
@@ -129,7 +129,7 @@ class EditAccounts extends Component {
                         </small>
                       </div>
                     </div>
-                    <div class="ibox-footer">
+                    <div className="ibox-footer">
                       <button
                         className="btn btn-primary btn-fix mr-4"
                         type="submit"

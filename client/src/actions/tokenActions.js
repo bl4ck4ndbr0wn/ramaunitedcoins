@@ -69,7 +69,7 @@ export const documentUpload = (imageUpload, id, history) => dispatch => {
 export const getTokenDescription = id => dispatch => {
   dispatch(setTokenLoading());
   axios
-    .get(`/api/token/${id}`)
+    .get(`/api/token/detail/${id}`)
     .then(res =>
       dispatch({
         type: GET_TOKEN_DESC,

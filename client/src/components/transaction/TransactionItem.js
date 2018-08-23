@@ -13,7 +13,7 @@ export default class TransactionItem extends Component {
         <td>${token.amount}</td>
         <td>
           <span
-            class={`badge badge-${
+            className={`badge badge-${
               token.confirmed ? "success" : "primary"
             } badge-pill`}
           >
@@ -35,9 +35,9 @@ export default class TransactionItem extends Component {
       </tr>
     ));
     return (
-      <div class="table-responsive row">
-        <table class="table table-bordered table-hover" id="datatable">
-          <thead class="thead-default thead-lg">
+      <div className="table-responsive row">
+        <table className="table table-bordered table-hover" id="datatable">
+          <thead className="thead-default thead-lg">
             <tr>
               <th>Transaction ID</th>
               <th>Mode of Payment</th>
@@ -45,7 +45,7 @@ export default class TransactionItem extends Component {
               <th>Status</th>
               <th>Document</th>
               <th>Date</th>
-              <th class="no-sort" />
+              <th className="no-sort" />
             </tr>
           </thead>
           {transaction}

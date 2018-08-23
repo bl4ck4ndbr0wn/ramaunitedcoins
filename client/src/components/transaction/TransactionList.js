@@ -25,8 +25,8 @@ class TransactionList extends Component {
       if (Object.keys(tokens).length > 0) {
         TransactionContent = (
           <div>
-            <div class="flexbox mb-4">
-              <div class="flexbox">
+            <div className="flexbox mb-4">
+              <div className="flexbox">
                 <Link to="/" className="btn btn-primary btn-fix">
                   <span className="btn-icon">Back</span>
                 </Link>
@@ -52,9 +52,9 @@ class TransactionList extends Component {
         <div className="content-wrapper" style={{ minHeight: "100vh" }}>
           {/*    <!-- START PAGE CONTENT-->*/}
           <div className="page-content fade-in-up">
-            <div class="ibox">
-              <div class="ibox-body">
-                <h5 class="font-strong mb-4">My Transactions</h5>
+            <div className="ibox">
+              <div className="ibox-body">
+                <h5 className="font-strong mb-4">My Transactions</h5>
                 {TransactionContent}
               </div>
             </div>
