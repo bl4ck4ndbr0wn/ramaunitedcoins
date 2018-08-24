@@ -1,15 +1,22 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Moment from "react-moment";
+import { withRouter, Link } from "react-router-dom";
+import { connect } from "react-redux";
 
+import { confrimTransaction } from "../../../actions/tokenActions";
 import visa from "../../../assets/img/logos/payment/visa.png";
 import ltc from "../../../assets/img/logos/payment/LTC.png";
 import btc from "../../../assets/img/logos/payment/btc.png";
 import eth from "../../../assets/img/logos/payment/Ethereum.png";
 
 class TransactionInfo extends Component {
+  onConfirm(id) {
+    this.props.confrimTransaction(id);
+  }
+
   render() {
-    const { user, token } = this.props;
+    const { token, user, userAuth } = this.props;
     let image;
     let symbol;
 
@@ -45,6 +52,18 @@ class TransactionInfo extends Component {
                 >
                   {token.confirmed ? "Approved" : "Pending"}
                 </span>
+                {token.confirmed ? (
+                  ""
+                ) : userAuth.role === "admin" ? (
+                  <button
+                    onClick={this.onConfirm.bind(this, token._id)}
+                    className="btn btn-danger btn-sm ml-4"
+                  >
+                    Confirm Payment
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
             <div className="row align-items-center">
@@ -78,7 +97,13 @@ class TransactionInfo extends Component {
 }
 
 TransactionInfo.propTypes = {
+  confrimTransaction: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  token: PropTypes.object.isRequired
+  token: PropTypes.object.isRequired,
+  userAuth: PropTypes.object.isRequired
 };
-export default TransactionInfo;
+
+export default connect(
+  null,
+  { confrimTransaction }
+)(TransactionInfo);

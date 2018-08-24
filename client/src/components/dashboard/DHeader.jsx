@@ -2,7 +2,9 @@ import React, { Component } from "react";
 
 export default class DHeader extends Component {
   render() {
-    const { tokens } = this.props;
+    const { tokens, profile, settings } = this.props;
+
+    console.log(settings);
     let confirmedTotal = 0;
     let notconfirmedTotal = 0;
     let pending;
@@ -31,11 +33,15 @@ export default class DHeader extends Component {
                 <canvas height="80" width="80" />
               </div>
               <div>
-                <h3 className="font-strong text-success">1000 RCC</h3>
+                <h3 className="font-strong text-success">
+                  {profile.amount} RCC
+                </h3>
                 <div className="text-muted">RCC Balance</div>
               </div>
               <div>
-                <h3 className="font-strong text-pink">0.75 USD</h3>
+                <h3 className="font-strong text-pink">
+                  {settings.round[0].price} USD
+                </h3>
                 <div className="text-muted">Price/coin</div>
               </div>
             </div>
@@ -60,11 +66,16 @@ export default class DHeader extends Component {
                 <canvas height="80" width="80" />
               </div>
               <div>
-                <h3 className="font-strong text-success">500 RUC</h3>
+                <h3 className="font-strong text-success">
+                  {" "}
+                  {profile.amount * settings.round[0].bonus} RUC
+                </h3>
                 <div className="text-muted">RUC Balance</div>
               </div>
               <div>
-                <h3 className="font-strong text-pink">50%</h3>
+                <h3 className="font-strong text-pink">
+                  {settings.round[0].bonus}%
+                </h3>
                 <div className="text-muted">Bonus</div>
               </div>
             </div>

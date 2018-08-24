@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 
 import { getCurrentProfile, deleteAccount } from "../../actions/profileActions";
 import { getCurrentTokens } from "../../actions/tokenActions";
+import { getSettings } from "../../actions/settingActions";
 import Header from "../layout/Header";
 import Footer from "../layout/Footer";
 import Spinner from "../common/Spinner";
@@ -17,6 +18,7 @@ class Dashboard extends Component {
   componentDidMount() {
     this.props.getCurrentProfile();
     this.props.getCurrentTokens();
+    this.props.getSettings();
   }
 
   onDeleteClick(e) {
@@ -24,6 +26,7 @@ class Dashboard extends Component {
   }
 
   render() {
+    const { settings } = this.props.setting;
     const { user } = this.props.auth;
     const { profile, loading } = this.props.profile;
     const { tokens } = this.props.token;
@@ -40,7 +43,17 @@ class Dashboard extends Component {
         if (Object.keys(profile).length > 0) {
           dashboardContent = (
             <div>
-              {tokens == null || loading ? "" : <DHeader tokens={tokens} />}
+              {tokens == null || loading ? (
+                ""
+              ) : settings == null || loading ? (
+                ""
+              ) : (
+                <DHeader
+                  profile={profile}
+                  tokens={tokens}
+                  settings={settings}
+                />
+              )}
               <CardUser
                 user={user}
                 profile={profile}
@@ -111,6 +124,7 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   getCurrentTokens: PropTypes.func.isRequired,
+  getSettings: PropTypes.func.isRequired,
   deleteAccount: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired
@@ -119,10 +133,11 @@ Dashboard.propTypes = {
 const mapStateToProps = state => ({
   profile: state.profile,
   token: state.token,
-  auth: state.auth
+  auth: state.auth,
+  setting: state.setting
 });
 
 export default connect(
   mapStateToProps,
-  { getCurrentProfile, getCurrentTokens, deleteAccount }
+  { getCurrentProfile, getCurrentTokens, deleteAccount, getSettings }
 )(Dashboard);

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
+import Moment from "react-moment";
 
 import { getTokenDescription } from "../../../actions/tokenActions";
 import Header from "../../layout/Header";
@@ -18,24 +19,34 @@ class ConfirmTransaction extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.token.token_desc === null && this.props.token.loading) {
-      this.props.history.push("/not-found");
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.token.token_desc === null && this.props.token.loading) {
+  //     this.props.history.push("/not-found");
+  //   }
+  // }
+
   render() {
     const { token_desc, loading } = this.props.token;
+    const { user } = this.props.auth;
     let transactionDesc;
+    let tDate;
+    let tID;
 
     if (loading || isEmpty(token_desc)) {
       transactionDesc = <Spinner />;
     } else {
+      tDate = <Moment format="DD.MM.YYYY">{token_desc.token.date}</Moment>;
+      tID = token_desc.token._id;
       transactionDesc = (
         <div className="row">
           <div className="col-xl-7">
             <DocumentList token={token_desc.token} />
           </div>
-          <TransactionInfo user={token_desc.profile} token={token_desc.token} />
+          <TransactionInfo
+            user={token_desc.profile}
+            token={token_desc.token}
+            userAuth={user}
+          />
         </div>
       );
     }
@@ -57,10 +68,11 @@ class ConfirmTransaction extends Component {
                 <i className="fa fa-exchange" />
               </span>
               <div>
-                <h5 className="font-strong">Transaction #1253</h5>
-                <div className="text-light">On, 17.05.2018</div>
+                <h5 className="font-strong">Transaction #{tID}</h5>
+                <div className="text-light">On, {tDate}</div>
               </div>
             </div>
+
             {transactionDesc}
           </div>
         </div>
@@ -72,11 +84,13 @@ class ConfirmTransaction extends Component {
 
 ConfirmTransaction.propTypes = {
   getTokenDescription: PropTypes.func.isRequired,
-  token: PropTypes.object.isRequired
+  token: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  token: state.token
+  token: state.token,
+  auth: state.auth
 });
 export default connect(
   mapStateToProps,

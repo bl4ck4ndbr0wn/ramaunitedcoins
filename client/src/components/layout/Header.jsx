@@ -4,7 +4,10 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import { logoutUser, getUsers } from "../../actions/authActions";
-import { clearCurrentProfile } from "../../actions/profileActions";
+import {
+  clearCurrentProfile,
+  getCurrentProfile
+} from "../../actions/profileActions";
 import Navigation from "../admin/Navigation";
 import rama from "../../assets/img/logo/payment/rama.png";
 
@@ -12,6 +15,7 @@ class Header extends Component {
   componentDidMount() {
     const { user } = this.props.auth;
     user.role === "admin" ? this.props.getUsers() : null;
+    this.props.getCurrentProfile();
   }
   onLogoutClick(e) {
     e.preventDefault();
@@ -21,6 +25,8 @@ class Header extends Component {
   }
   render() {
     const { isAuthenticated, user, users } = this.props.auth;
+    const { profile, loading } = this.props.profile;
+
     const adminDropdown = (
       <li>
         <a href="javascript:;">
@@ -127,12 +133,24 @@ class Header extends Component {
           {/* <!-- START TOP-RIGHT TOOLBAR--> */}
 
           <ul className="nav navbar-toolbar">
-            <span
-              className="text-white pb-1 d-inline-block mr-4"
-              style={{ borderBottom: "2px solid" }}
-            >
-              RCC Balance: 1230.00 RCC
-            </span>
+            {profile === null || loading ? (
+              ""
+            ) : Object.keys(profile).length > 0 ? (
+              <span
+                className="text-white pb-1 d-inline-block mr-4"
+                style={{ borderBottom: "2px solid" }}
+              >
+                RCC Balance: {profile.amount}
+                RCC
+              </span>
+            ) : (
+              <span
+                className="text-white pb-1 d-inline-block mr-4"
+                style={{ borderBottom: "2px solid" }}
+              >
+                RCC Balance: 0 RCC
+              </span>
+            )}
             <li className="dropdown dropdown-user">
               <a
                 className="nav-link dropdown-toggle link"
@@ -218,16 +236,19 @@ class Header extends Component {
 }
 
 Header.propTypes = {
+  getCurrentProfile: PropTypes.func.isRequired,
   getUsers: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  profile: state.profile
 });
 
 export default connect(
   mapStateToProps,
-  { clearCurrentProfile, logoutUser, getUsers }
+  { clearCurrentProfile, logoutUser, getUsers, getCurrentProfile }
 )(Header);

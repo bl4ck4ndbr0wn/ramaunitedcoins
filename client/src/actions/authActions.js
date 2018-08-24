@@ -99,12 +99,12 @@ export const resendEmail = (userData, history) => dispatch => {
 };
 
 // Email Confirmation
-export const confirmAccount = id => dispatch => {
+export const confirmAccount = (id, history) => dispatch => {
   axios
     .post("/api/users/confirmation", id)
     .then((
       res // Set current user
-    ) => dispatch(setCurrentUser(res.data)))
+    ) => history.push("/login"))
     .catch(err =>
       dispatch({
         type: GET_ERRORS,

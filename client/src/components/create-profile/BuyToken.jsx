@@ -58,6 +58,7 @@ class BuyToken extends Component {
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+    console.log(this.state);
   }
   onSubmit(e) {
     e.preventDefault();
@@ -160,7 +161,6 @@ class BuyToken extends Component {
                         error={errors.amount}
                         info="Allows onlu whole numbers $99"
                       />
-
                       {ConvertedAmout}
                     </div>
                     <div

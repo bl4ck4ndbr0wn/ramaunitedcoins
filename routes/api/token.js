@@ -187,7 +187,6 @@ router.post(
       .then(token => {
         // Check if already confirmed
         if (token.confirmed) {
-          con;
           token.confirmed = false;
 
           token.save().then(tokens => res.json(tokens));
