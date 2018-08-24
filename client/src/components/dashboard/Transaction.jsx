@@ -6,6 +6,7 @@ import visa from "../../assets/img/logos/payment/visa.png";
 import ltc from "../../assets/img/logos/payment/LTC.png";
 import btc from "../../assets/img/logos/payment/btc.png";
 import eth from "../../assets/img/logos/payment/Ethereum.png";
+import btch from "../../assets/img/logo/btch.png";
 
 export default class Transaction extends Component {
   render() {
@@ -17,6 +18,7 @@ export default class Transaction extends Component {
       else if (token.modetransfer === "LTC") (image = ltc), (symbol = "LTC");
       else if (token.modetransfer === "BTC") (image = btc), (symbol = "BTC");
       else if (token.modetransfer === "ETH") (image = eth), (symbol = "ETH");
+      else if (token.modetransfer === "BCH") (image = btch), (symbol = "BCH");
 
       return (
         <li className="media" key={token._id}>

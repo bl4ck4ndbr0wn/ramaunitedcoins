@@ -85,16 +85,11 @@ export const getTokenDescription = id => dispatch => {
 };
 
 // Confrim Request
-export const confrimTransaction = id => dispatch => {
+export const confrimTransaction = (id, history) => dispatch => {
   dispatch(setTokenLoading());
   axios
     .post(`/api/token/confirm/${id}`)
-    .then(res =>
-      dispatch({
-        type: GET_TOKEN_DESC,
-        payload: res.data
-      })
-    )
+    .then(res => history.push("/transactions"))
     .catch(err =>
       dispatch({
         type: GET_TOKEN_DESC,

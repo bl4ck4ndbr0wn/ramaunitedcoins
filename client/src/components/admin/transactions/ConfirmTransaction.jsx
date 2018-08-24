@@ -13,20 +13,36 @@ import TransactionInfo from "./TransactionInfo";
 import DocumentList from "./DocumentList";
 
 class ConfirmTransaction extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      token_desc: null,
+      loading: false
+    };
+  }
   componentDidMount() {
     if (this.props.match.params.id) {
-      this.props.getTokenDescription(this.props.match.params.id);
+      this.props.getTokenDescription(
+        this.props.match.params.id,
+        this.props.history
+      );
     }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.token.token_desc === null && this.props.token.loading) {
-  //     this.props.history.push("/not-found");
-  //   }
-  // }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.token.token_desc === null && this.props.token.loading) {
+      this.props.history.push("/transactions");
+    } else {
+      const { token_desc, loading } = nextProps.token;
+      this.setState({
+        token_desc,
+        loading
+      });
+    }
+  }
 
   render() {
-    const { token_desc, loading } = this.props.token;
+    const { token_desc, loading } = this.state;
     const { user } = this.props.auth;
     let transactionDesc;
     let tDate;
@@ -35,20 +51,26 @@ class ConfirmTransaction extends Component {
     if (loading || isEmpty(token_desc)) {
       transactionDesc = <Spinner />;
     } else {
-      tDate = <Moment format="DD.MM.YYYY">{token_desc.token.date}</Moment>;
-      tID = token_desc.token._id;
-      transactionDesc = (
-        <div className="row">
-          <div className="col-xl-7">
-            <DocumentList token={token_desc.token} />
+      if (Object.keys(token_desc).length > 0 && !isEmpty(token_desc)) {
+        tDate = <Moment format="DD.MM.YYYY">{token_desc.token.date}</Moment>;
+        tID = token_desc.token._id;
+        transactionDesc = (
+          <div className="row">
+            <div className="col-xl-7">
+              <DocumentList token={token_desc.token} />
+            </div>
+            <TransactionInfo
+              user={token_desc.profile}
+              token={token_desc.token}
+              userAuth={user}
+            />
           </div>
-          <TransactionInfo
-            user={token_desc.profile}
-            token={token_desc.token}
-            userAuth={user}
-          />
-        </div>
-      );
+        );
+      } else {
+        tDate = <Moment format="DD.MM.YYYY">0.0.0.0</Moment>;
+        tID = 0;
+        transactionDesc = <Spinner />;
+      }
     }
 
     return (

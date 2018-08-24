@@ -9,6 +9,7 @@ import visa from "../../../assets/img/logos/payment/visa.png";
 import ltc from "../../../assets/img/logos/payment/LTC.png";
 import btc from "../../../assets/img/logos/payment/btc.png";
 import eth from "../../../assets/img/logos/payment/Ethereum.png";
+import btch from "../../../assets/img/logo/btch.png";
 
 class TransactionInfo extends Component {
   onConfirm(id) {
@@ -24,6 +25,7 @@ class TransactionInfo extends Component {
     else if (token.modetransfer === "LTC") (image = ltc), (symbol = "LTC");
     else if (token.modetransfer === "BTC") (image = btc), (symbol = "BTC");
     else if (token.modetransfer === "ETH") (image = eth), (symbol = "ETH");
+    else if (token.modetransfer === "BCH") (image = btch), (symbol = "BCH");
 
     return (
       <div className="col-xl-5">
