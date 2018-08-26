@@ -98,7 +98,7 @@ class App extends Component {
               <Switch>
                 <PrivateRoute
                   exact
-                  path="/admin/transaction/:id"
+                  path="/transaction/:id"
                   component={ConfirmTransaction}
                 />
               </Switch>

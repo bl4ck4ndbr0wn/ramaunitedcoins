@@ -21,6 +21,7 @@ class BuyToken extends Component {
       address: "",
       price: "",
       bonus: "",
+      currentRate: "",
       errors: {}
     };
 
@@ -58,8 +59,25 @@ class BuyToken extends Component {
 
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-    console.log(this.state);
   }
+
+  onConvert(symbol) {
+    if (symbol !== "Bank") {
+      fetch("https://api.coinmarketcap.com/v2/ticker/")
+        .then(response => response.json())
+        .then(responseData => {
+          if (responseData.data !== {}) {
+            Object.entries(responseData.data).map(item => {
+              if (item[1].symbol === symbol) {
+                this.setState({ currentRate: item[1].quotes.USD.price });
+              }
+            });
+          }
+        })
+        .catch();
+    }
+  }
+
   onSubmit(e) {
     e.preventDefault();
     const { modetransfer, amount } = this.state;
@@ -72,7 +90,14 @@ class BuyToken extends Component {
   }
 
   render() {
-    const { errors, amount, price, bonus } = this.state;
+    const {
+      errors,
+      amount,
+      price,
+      bonus,
+      modetransfer,
+      currentRate
+    } = this.state;
 
     // Select options for status
     const options = [
@@ -86,23 +111,40 @@ class BuyToken extends Component {
 
     let ConvertedAmout;
 
-    if (isEmpty(amount)) {
+    if (isEmpty(amount) || isEmpty(this.state.modetransfer)) {
       ConvertedAmout = "";
     } else {
-      let rcc = amount / price;
-      let ruc = amount * bonus;
+      if (this.state.modetransfer) {
+        this.onConvert(this.state.modetransfer);
+        if (modetransfer === "Bank") {
+          ConvertedAmout = "";
+        } else {
+          let rcc = amount / price;
+          let ruc = amount * bonus;
 
-      // RCC coin
-      // 75% bonus of the RUC = 15,000 RUC
-      ConvertedAmout = (
-        <TextFieldGroup
-          placeholder="Amount and Bonus in RCC and RUC"
-          type="text"
-          disabled="disabled"
-          name="Camount"
-          value={`${rcc} RCC Coin and ${ruc} RUC Bonus.`}
-        />
-      );
+          // RCC coin
+          // 75% bonus of the RUC = 15,000 RUC
+          ConvertedAmout = (
+            <div>
+              <label class="mb-0 mr-2">
+                {modetransfer} Current Exchange Rate: {currentRate}
+              </label>
+              <br />
+              <label class="mb-0 mr-2">
+                RCC Tokens [{price}
+                /coin]: {rcc}
+              </label>
+              <br />
+              <label class="mb-0 mr-2">
+                RUC Tokens [{bonus}
+                %]: {ruc}
+              </label>
+            </div>
+          );
+        }
+      } else {
+        ConvertedAmout = "";
+      }
     }
 
     return (
@@ -114,7 +156,7 @@ class BuyToken extends Component {
         <div className="content-wrapper" style={{ minHeight: "100vh" }}>
           {/*
     <!-- START PAGE CONTENT-->*/}
-          <Breadcrumb title="Buy KYC Tokens" item="Buy KYC" />
+          <Breadcrumb title="Buy Tokens" item="Buy Tokens" />
           <div className="page-content fade-in-up">
             <div className="row justify-content-md-center">
               <div className="col-md-8">
@@ -140,26 +182,34 @@ class BuyToken extends Component {
                       />
                       {this.state.modetransfer === "ETH" ? (
                         <TextFieldGroup
-                          placeholder="* Amount in $"
+                          placeholder="Company ETH Address."
                           type="number"
                           name="address"
                           value={this.state.address}
                           onChange={this.onChange}
                           disabled="disabled"
-                          info="bank in to this company Ethereum address."
+                          info="Bank in to this company Ethereum address."
                         />
                       ) : (
                         ""
                       )}
 
                       <TextFieldGroup
-                        placeholder="* Amount in $"
+                        placeholder={
+                          isEmpty(modetransfer)
+                            ? "Amount in Selected mode of Transfer"
+                            : `Enter number of ${modetransfer}`
+                        }
                         type="number"
                         name="amount"
                         value={this.state.amount}
                         onChange={this.onChange}
                         error={errors.amount}
-                        info="Allows onlu whole numbers $99"
+                        info={
+                          isEmpty(modetransfer)
+                            ? "Amount in Selected mode of Transfer"
+                            : `Enter number of ${modetransfer} to transfer`
+                        }
                       />
                       {ConvertedAmout}
                     </div>

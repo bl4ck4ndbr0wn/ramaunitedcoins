@@ -26,7 +26,7 @@ export default class TransactionItem extends Component {
         </td>
         <td>
           <Link
-            to={`/admin/transaction/${token._id}`}
+            to={`/transaction/${token._id}`}
             lass="text-muted font-16"
           >
             <i className="fa fa-edit" />
