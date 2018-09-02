@@ -94,7 +94,7 @@ router.post("/register", (req, res) => {
                       pass: passSg
                     }
                   });
-                  const url = `http://${req.headers.host}/confirmation/${
+                  const url = `http://${req.headers.host}/confirm/${
                     token.token
                   }`;
                   const mailOptions = {
@@ -297,7 +297,7 @@ router.post("/resend", (req, res) => {
             pass: passSg
           }
         });
-        const url = `http://${req.headers.host}/confirmation/${token.token}`;
+        const url = `http://${req.headers.host}/confirm/${token.token}`;
         const mailOptions = {
           from: "no-reply@ramaunitedcoin.io",
           to: user.email,
