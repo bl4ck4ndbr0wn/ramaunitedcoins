@@ -1,0 +1,25 @@
+export const GET_ERRORS = "GET_ERRORS";
+export const CLEAR_ERRORS = "CLEAR_ERRORS";
+
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
+export const USER_LOADING = "USER_LOADING";
+export const GET_USERS = "GET_USERS";
+export const GET_CURRENT_USER = "GET_CURRENT_USER";
+
+export const GET_PROFILE = "GET_PROFILE";
+export const PROFILE_LOADING = "PROFILE_LOADING";
+export const PROFILE_NOT_FOUND = "PROFILE_NOT_FOUND";
+export const CLEAR_CURRENT_PROFILE = "CLEAR_CURRENT_PROFILE";
+export const GET_PROFILES = "GET_PROFILES";
+export const GET_REFERRED = "GET_REFERRED";
+
+export const GET_TOKEN = "GET_TOKEN";
+export const GET_TOKENS = "GET_TOKENS";
+export const TOKEN_LOADING = "TOKEN_LOADING";
+export const TOKEN_NOT_FOUND = "TOKEN_NOT_FOUND";
+export const CLEAR_TOKENS = "CLEAR_TOKENS";
+
+export const GET_SETTINGS = "GET_SETTINGS";
+export const SETTING_LOADING = "SETTING_LOADING";
+export const GET_TOKEN_DESC = "GET_TOKEN_DESC";
+export const UPLOAD_PROGRESS = "UPLOAD_PROGRESS";
