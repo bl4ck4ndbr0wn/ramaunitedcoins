@@ -129,23 +129,24 @@ router.post(
     if (req.body.isActive) roundFields.isActive = req.body.isActive;
 
     // Add to accounts array
-    Round.findOne({ round: req.body.round }).then(round => {
-      if (round) {
-        //update
-        Round.findOneAndUpdate(
-          { round: req.body.round },
-          { $set: roundFields },
-          { new: true }
-        ).then(round => {
-          res.json(round);
-        });
-      } else {
-        //check if there is another active round
-        Round.findOne({ isActive: true }).then(round => {
-          if (round) {
-            round.isActive = false;
 
-            round.save().then(() => {
+    //check if there is another active round
+    Round.findOne({ isActive: true }).then(round => {
+      if (round) {
+        round.isActive = false;
+
+        round.save().then(
+          Round.findOne({ round: req.body.round }).then(round => {
+            if (round) {
+              //update
+              Round.findOneAndUpdate(
+                { round: req.body.round },
+                { $set: roundFields },
+                { new: true }
+              ).then(round => {
+                res.json(round);
+              });
+            } else {
               //Create round
               new Round(roundFields)
                 .save()
@@ -153,6 +154,19 @@ router.post(
                 .catch(err =>
                   res.statusCode(404).send({ msg: "Unable to Save Round." })
                 );
+            }
+          })
+        );
+      } else {
+        Round.findOne({ round: req.body.round }).then(round => {
+          if (round) {
+            //update
+            Round.findOneAndUpdate(
+              { round: req.body.round },
+              { $set: roundFields },
+              { new: true }
+            ).then(round => {
+              res.json(round);
             });
           } else {
             //Create round

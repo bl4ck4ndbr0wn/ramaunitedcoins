@@ -17,7 +17,7 @@ class PhaseVolumeFeed extends Component {
           <td>
             <Moment format="YYYY/MM/DD">{round.date}</Moment>
           </td>
-          <td>{round.isActive ? "Active" : "Deactivated"}</td>
+          <td>{round.isActive ? "Current" : "InActive"}</td>
           <td>
             <Link
               to={`/admin/settings/edit-round/${round._id}`}
