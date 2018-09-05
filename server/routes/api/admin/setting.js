@@ -140,13 +140,30 @@ router.post(
           res.json(round);
         });
       } else {
-        //Create round
-        new Round(roundFields)
-          .save()
-          .then(round => res.json(round))
-          .catch(err =>
-            res.statusCode(404).send({ msg: "Unable to Save Round." })
-          );
+        //check if there is another active round
+        Round.findOne({ isActive: true }).then(round => {
+          if (round) {
+            round.isActive = false;
+
+            round.save().then(() => {
+              //Create round
+              new Round(roundFields)
+                .save()
+                .then(round => res.json(round))
+                .catch(err =>
+                  res.statusCode(404).send({ msg: "Unable to Save Round." })
+                );
+            });
+          } else {
+            //Create round
+            new Round(roundFields)
+              .save()
+              .then(round => res.json(round))
+              .catch(err =>
+                res.statusCode(404).send({ msg: "Unable to Save Round." })
+              );
+          }
+        });
       }
     });
   }

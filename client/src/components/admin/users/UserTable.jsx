@@ -30,9 +30,9 @@ badge-pill`}
           <Moment format="YYYY/MM/DD">{user.date}</Moment>
         </td>
         <td>
-          <a className="text-muted font-16" href="javascript:;">
-            <i className="ti-trash" />
-          </a>
+          <Link className="text-muted font-16" to={`/admin/user/${user._id}`}>
+            <i className="ti-pencil" />
+          </Link>
         </td>
       </tr>
     ));

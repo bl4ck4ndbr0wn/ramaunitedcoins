@@ -52,7 +52,7 @@ class CreateUser extends Component {
     const { errors } = this.state;
 
     const options = [
-      { label: "* Select Payment Method", value: 0, icon: "ti-wallet" },
+      { label: "* Type of Account", value: 0, icon: "ti-wallet" },
       { label: "Investor", value: "investor", icon: "ti-credit-card" },
       { label: "Agent", value: "agent", icon: "ti-wallet" },
       { label: "Admin", value: "admin", icon: "ti-wallet" }

@@ -9,8 +9,9 @@ const profile = require("./server/routes/api/user/profile");
 const request = require("./server/routes/api/user/request");
 
 const setting = require("./server/routes/api/admin/setting");
-const AdminUser = require("./server/routes/api/admin/user");
-const AdminRequest = require("./server/routes/api/admin/request");
+const adminUser = require("./server/routes/api/admin/user");
+const adminRequest = require("./server/routes/api/admin/request");
+const adminProfile = require("./server/routes/api/admin/profile");
 
 const app = express();
 
@@ -70,8 +71,9 @@ app.use("/api/v1/request", request);
 
 // Routes (Admin)
 app.use("/api/v1/admin/setting", setting);
-app.use("/api/v1/admin/user", AdminUser);
-app.use("/api/v1/admin/request", AdminRequest);
+app.use("/api/v1/admin/user", adminUser);
+app.use("/api/v1/admin/profile", adminProfile);
+app.use("/api/v1/admin/request", adminRequest);
 
 // Server static assets if in production
 if (process.env.NODE_ENV === "production") {

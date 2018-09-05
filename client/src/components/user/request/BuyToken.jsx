@@ -291,7 +291,11 @@ class BuyToken extends Component {
                         placeholder={
                           isEmpty(modetransfer)
                             ? "Amount in Selected mode of Transfer"
-                            : `Enter number of ${modetransfer}`
+                            : this.state.modetransfer === "Bank"
+                              ? "Investment Amount in USD"
+                              : `Investment Amount in ${
+                                  this.state.modetransfer
+                                }`
                         }
                         type="number"
                         name="amount"
@@ -301,7 +305,11 @@ class BuyToken extends Component {
                         info={
                           isEmpty(modetransfer)
                             ? "Amount in Selected mode of Transfer"
-                            : `Enter number of ${modetransfer} to transfer`
+                            : this.state.modetransfer === "Bank"
+                              ? "Investment Amount in USD"
+                              : `Investment Amount in ${
+                                  this.state.modetransfer
+                                }`
                         }
                       />
                     </div>

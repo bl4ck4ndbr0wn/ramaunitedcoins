@@ -21,7 +21,9 @@ import ResendConfirm from "./components/authentication/ResendConfirm";
 import Dashboard from "./components/dashboard";
 
 import CreateUser from "./components/admin/users/CreateUser";
+import AdminCreateProfile from "./components/admin/users/AdminCreateProfile";
 import Users from "./components/admin/users/Users";
+import EditUser from "./components/admin/users/edit-user/EditUser";
 
 import Settings from "./components/admin/setting/Index";
 import AccountAddress from "./components/admin/setting/AccountAddress";
@@ -154,6 +156,21 @@ class App extends Component {
                   component={CreateUser}
                 />
               </Switch>
+              <Switch>
+                <AdminPrivateRoute
+                  exact
+                  path="/admin/user/:id"
+                  component={EditUser}
+                />
+              </Switch>
+
+              <Switch>
+                <AdminPrivateRoute
+                  exact
+                  path="/admin/user/profile/:id"
+                  component={AdminCreateProfile}
+                />
+              </Switch>
 
               <Switch>
                 <AdminPrivateRoute
@@ -162,6 +179,7 @@ class App extends Component {
                   component={Users}
                 />
               </Switch>
+
               <Switch>
                 <AdminPrivateRoute
                   exact

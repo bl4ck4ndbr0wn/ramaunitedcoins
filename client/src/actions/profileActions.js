@@ -7,7 +7,10 @@ import {
   CLEAR_CURRENT_PROFILE,
   GET_ERRORS,
   SET_CURRENT_USER,
-  GET_REFERRED
+  GET_REFERRED,
+  GET_PROFILE_BY_ID,
+  PROFILE_SUCCESS,
+  GET_PROFILE_DETAILS
 } from "./types";
 
 // Get current profile
@@ -25,6 +28,25 @@ export const getCurrentProfile = () => dispatch => {
       dispatch({
         type: GET_PROFILE,
         payload: {}
+      })
+    );
+};
+
+// Get profile by handle
+export const getProfileByHandle = handle => dispatch => {
+  dispatch(setProfileLoading());
+  axios
+    .get(`/api/v1/profile/${handle}`)
+    .then(res =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_PROFILE,
+        payload: null
       })
     );
 };
@@ -48,39 +70,19 @@ export const getMyRefferals = () => dispatch => {
     );
 };
 
-// Get profile by handle
-export const getProfileByHandle = handle => dispatch => {
-  dispatch(setProfileLoading());
-  axios
-    .get(`/api/v1/profile/handle/${handle}`)
-    .then(res =>
-      dispatch({
-        type: GET_PROFILE,
-        payload: res.data
-      })
-    )
-    .catch(err =>
-      dispatch({
-        type: GET_PROFILE,
-        payload: null
-      })
-    );
-};
-
 // Get profile by user_id
 export const getProfileByUserId = user_id => dispatch => {
-  dispatch(setProfileLoading());
   axios
     .get(`/api/v1/profile/user/${user_id}`)
     .then(res =>
       dispatch({
-        type: GET_PROFILE,
+        type: GET_PROFILE_BY_ID,
         payload: res.data
       })
     )
     .catch(err =>
       dispatch({
-        type: GET_PROFILE,
+        type: GET_PROFILE_BY_ID,
         payload: null
       })
     );
@@ -91,6 +93,25 @@ export const createProfile = (profileData, history) => dispatch => {
   axios
     .post("/api/v1/profile", profileData)
     .then(res => history.push("/dashboard"))
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// Update or create Profile
+export const updateProfile = (profileData, id) => dispatch => {
+  dispatch(setProfileLoading());
+  axios
+    .post(`/api/v1/admin/profile/${id}`, profileData)
+    .then(res =>
+      dispatch({
+        type: GET_PROFILE_DETAILS,
+        payload: res.data
+      })
+    )
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
@@ -142,6 +163,12 @@ export const deleteAccount = () => dispatch => {
 export const setProfileLoading = () => {
   return {
     type: PROFILE_LOADING
+  };
+};
+// Profile Success
+export const setProfileSuccess = () => {
+  return {
+    type: PROFILE_SUCCESS
   };
 };
 

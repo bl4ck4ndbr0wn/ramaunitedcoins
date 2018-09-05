@@ -184,9 +184,11 @@ class RequestToken extends Component {
                         info={
                           isEmpty(this.state.modetransfer)
                             ? "Amount in Selected mode of Transfer"
-                            : `Enter number of ${
-                                this.state.modetransfer
-                              } to transfer`
+                            : this.state.modetransfer === "Bank"
+                              ? "Investment Amount in USD"
+                              : `Enter number of ${
+                                  this.state.modetransfer
+                                } to transfer`
                         }
                       />
                     </div>

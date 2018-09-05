@@ -1,11 +1,12 @@
 import isEmpty from "../../validation/is-empty";
 
-import { USER_LOADING, GET_USERS } from "../../actions/types";
+import { USER_LOADING, GET_USERS, GET_USER } from "../../actions/types";
 
 const initialState = {
   loading: false,
   user: null,
-  users: null
+  users: null,
+  user_by_id: null
 };
 
 export default function(state = initialState, action) {
@@ -14,6 +15,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: true
+      };
+    case GET_USER:
+      return {
+        ...state,
+        user_by_id: action.payload,
+        loading: false
       };
     case GET_USERS:
       return {
