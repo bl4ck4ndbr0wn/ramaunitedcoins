@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter, Link } from "react-router-dom";
+import QRCode from "qrcode.react";
 
 import { createToken } from "../../../actions/tokenActions";
 import { getSettings } from "../../../actions/admin/settingAction";
@@ -31,7 +32,6 @@ class BuyToken extends Component {
       errors: {}
     };
 
-    this.onConvert = this.onConvert.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -66,72 +66,6 @@ class BuyToken extends Component {
       });
     }
   }
-
-  onConvert(symbol) {
-    // let test = {
-    //   data: {
-    //     id: 1,
-    //     name: "Bitcoin",
-    //     symbol: "BTC",
-    //     website_slug: "bitcoin",
-    //     rank: 1,
-    //     circulating_supply: 17240562,
-    //     total_supply: 17240562,
-    //     max_supply: 21000000,
-    //     quotes: {
-    //       ETH: {
-    //         price: 24.4188205383,
-    //         volume_24h: 15404278.064291444,
-    //         market_cap: 420994189,
-    //         percent_change_1h: 0.27,
-    //         percent_change_24h: 0.79,
-    //         percent_change_7d: 3.95
-    //       },
-    //       USD: {
-    //         price: 6944.1432322,
-    //         volume_24h: 4380617528.1535,
-    //         market_cap: 119720931932,
-    //         percent_change_1h: 0.72,
-    //         percent_change_24h: -1.52,
-    //         percent_change_7d: 6.91
-    //       }
-    //     },
-    //     last_updated: 1535665164
-    //   },
-    //   metadata: {
-    //     timestamp: 1535664682,
-    //     error: null
-    //   }
-    // };
-    let price = 0;
-    let dict = {};
-
-    if (symbol !== "Bank" || (symbol !== "0" && !isEmpty(symbol))) {
-      fetch(`https://api.coinmarketcap.com/v2/ticker/1/?convert=${symbol}`)
-        .then(response => response.json())
-        .then(responseData => {
-          if (responseData.data !== {}) {
-            // console.log(responseData.data.quotes);
-            let dict = {};
-
-            Object.entries(responseData.data.quotes).map(item => {
-              dict[item[0]] = item[1].price;
-            });
-
-            let coinPrice = dict[symbol];
-            let usdPrice = dict.USD;
-
-            if (symbol === "BTC") {
-              usdPrice;
-            } else {
-              usdPrice / coinPrice;
-            }
-          }
-        })
-        .catch(err => console.log(err));
-    }
-  }
-
   onSubmit(e) {
     e.preventDefault();
 
@@ -192,16 +126,13 @@ class BuyToken extends Component {
           result = settings.account.find(accc => accc.type === modetransfer);
         }
 
-        // Get current currency rate
-        let data = this.onConvert(this.state.modetransfer);
-        console.log(data);
-
         tokenInfo =
           isEmpty(this.state.modetransfer) ||
-          this.state.modetransfer === "0" ? (
+          this.state.modetransfer === "0" ||
+          modetransfer === "Bank" ? (
             ""
           ) : (
-            <div class="col-md-4 col-xl-4">
+            <div class="col-md-6 col-xl-6">
               <div class="mini-stat clearfix bg-info">
                 <span class="mini-stat-icon bg-light">
                   <img src={image} alt="image" width="60" />
@@ -209,28 +140,35 @@ class BuyToken extends Component {
                 <div class="mini-stat-info text-right text-light">
                   <span class="counter text-white">0 RCC</span>0 RUC
                 </div>
-                <div class="mb-0 m-t-20 form-group">
-                  <span class="text-white">
-                    Bank in to this company {modetransfer} address.
-                  </span>
-                  <TextFieldGroup
-                    placeholder={`Company ${modetransfer} Address.`}
-                    type="number"
-                    name="address"
-                    value={result.address}
-                    onChange={this.onChange}
-                  />
-                  <button class="btn btn-sm btn-default" type="button">
-                    <i class="fa fa-copy" /> Copy Address
-                  </button>
+                <div className="d-flex justify-content-between">
+                  <div class="">
+                    <span class="text-white">
+                      Bank in to this company {modetransfer} address.
+                    </span>
+                    <TextFieldGroup
+                      placeholder={`Company ${modetransfer} Address.`}
+                      type="number"
+                      name="address"
+                      value={result.address}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div>
+                    <QRCode
+                      value={result.address}
+                      style={{
+                        height: "100px",
+                        width: "100px"
+                      }}
+                    />
+                  </div>
                 </div>
-                <p class="mb-0 m-t-20 text-light">
-                  Total income: $22506{" "}
-                  <span class="pull-right">
-                    1h change <i class="fa fa-caret-up m-r-5" />
-                    10.25%
-                  </span>
-                </p>
+
+                <div className="d-flex justify-content-between">
+                  <div class="mini-stat-info  text-light">
+                    1 {symbol} : $10 USD
+                  </div>
+                </div>
               </div>
             </div>
           );
@@ -264,7 +202,9 @@ class BuyToken extends Component {
           <div
             // class="col-8"
             class={
-              isEmpty(modetransfer) || modetransfer === "0"
+              isEmpty(modetransfer) ||
+              modetransfer === "0" ||
+              modetransfer === "Bank"
                 ? `col-md-8 col-xl-8`
                 : `col-md-6 col-xl-6`
             }

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const axios = require("axios");
 
 // Round model
 const Round = require("../../../models/Round");
@@ -36,6 +37,35 @@ router.get(
           errors.noaccount = "There are no account";
           return res.status(404).json(errors);
         }
+
+        account.map(acc => {
+          let type = acc.type;
+          let dict = [];
+
+          axios
+            .get(`https://api.coinmarketcap.com/v2/ticker/1/?convert=ETH`)
+            .then(response => {
+              // loop over values
+              let quotes = response.data.quotes;
+              if (quotes !== undefined) {
+                let coinPrice = quotes["ETH"].price;
+                let usdPrice = quote[USD].price;
+                let price = usdPrice / coinPrice;
+                dict["ETH"] = price;
+              }
+
+              //   let coinPrice = quotes[type].price;
+              //   let usdPrice = quotes.USD.price;
+
+              //   let price = usdPrice / coinPrice;
+              //   dict["ETH"] = price;
+            })
+            .catch(err => {
+              console.log(err);
+            });
+
+          console.log(dict);
+        });
 
         Round.find()
           .then(round => {

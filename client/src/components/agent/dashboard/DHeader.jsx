@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 
 const DHeader = ({ profile, settings }) => {
   let ruc = 0;
+  let notconfirmedTotal = 0;
+  let pending;
+
   const round = settings.round.find(round => round.isActive === true);
 
   if (round.bonus > 0) {
@@ -15,7 +18,7 @@ const DHeader = ({ profile, settings }) => {
       <div class="col-md-5 col-xl-5">
         <div class="mini-stat clearfix bg-white">
           <span class="mini-stat-icon bg-light">
-            <i class="mdi mdi-currency-usd text-danger" />
+            <i class="mdi mdi-cart-outline text-danger" />
           </span>
           <div class="mini-stat-info text-right text-muted">
             <span class="counter text-danger">{profile.amount}</span>
