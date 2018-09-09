@@ -27,10 +27,6 @@ module.exports = function validateAdminTokenRequestInput(req) {
     }
   }
 
-  if (isEmpty(data.fileupload)) {
-    errors.fileupload = "File field is required";
-  }
-
   return {
     errors,
     isValid: isEmpty(errors)

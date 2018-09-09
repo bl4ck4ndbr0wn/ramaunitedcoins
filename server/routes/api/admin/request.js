@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const multer = require("multer");
-
 const _ = require("lodash");
 
 // Request model
@@ -17,26 +15,6 @@ const validateAdminTokenRequestInput = require("../../../validation/tokenRequest
 
 // Check if user is Admins
 const authorize = require("../../../utils/authorize");
-
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, "./uploads");
-  },
-  filename: function(req, file, cb) {
-    cb(null, new Date().toISOString() + file.originalname);
-  }
-});
-
-const fileFilter = (req, file, cb) => {
-  // rejest a file
-  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-    cb(null, true);
-  } else {
-    cb(new Error("Only Jpeg or png are allowed."), false);
-  }
-};
-
-const upload = multer({ storage: storage });
 
 // @route   GET api/v1/admin/request/test
 // @desc    Tests tokem route
@@ -60,6 +38,31 @@ router.get(
   }
 );
 
+// @route   GET api/v1/admin/request/:id
+// @desc    Get request by ID
+// @access  Private
+
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  authorize("admin"),
+  (req, res) => {
+    Request.findById(req.params.id)
+      .populate("user", ["name", "avatar", "email", "role"])
+      .then(request => {
+        if (!request) {
+          errors.norequest = "There is no request for this id";
+          res.status(404).json(errors);
+        }
+
+        res.json(request);
+      })
+      .catch(err =>
+        res.status(404).json({ request: "There is no request for this Id" })
+      );
+  }
+);
+
 // @route   POST api/v1/admin/request
 // @desc    Request Token
 // @access  Private
@@ -67,7 +70,6 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   authorize("admin"),
-  upload.array("fileupload"),
   (req, res) => {
     const { errors, isValid } = validateAdminTokenRequestInput(req);
 
@@ -87,30 +89,7 @@ router.post(
 
     newToken
       .save()
-      .then(token => {
-        let fileModels = [];
-        console.log(JSON.parse(req.body.fileupload));
-
-        req.body.fileupload.map(file => {
-          const documentFields = {
-            originalname: file.originalname,
-            filename: file.filename,
-            path: file.path
-          };
-          // Add to document array
-          token.document.unshift(documentFields);
-
-          token
-            .save()
-            .catch(err =>
-              res
-                .status(404)
-                .json({ documentnotsaved: "Failed to save Document" })
-            );
-        });
-
-        res.json(token);
-      })
+      .then(token => res.json(token))
       .catch(err =>
         res
           .status(404)

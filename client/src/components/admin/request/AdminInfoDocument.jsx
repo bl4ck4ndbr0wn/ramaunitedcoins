@@ -9,7 +9,7 @@ import PageContent from "../../layout/PageContent";
 import isEmpty from "../../../validation/is-empty";
 import "./InfoDocument.css";
 
-class InfoDocument extends Component {
+class AdminInfoDocument extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -193,7 +193,7 @@ class InfoDocument extends Component {
 
                     <div className="col-6">
                       <Link
-                        to="/transaction/my-transactions"
+                        to="/admin/requests/all"
                         className="btn btn-info btn-block waves-effect waves-light"
                       >
                         Finish
@@ -226,7 +226,7 @@ class InfoDocument extends Component {
   }
 }
 
-InfoDocument.propTypes = {
+AdminInfoDocument.propTypes = {
   documentUpload: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   token: PropTypes.object.isRequired,
@@ -242,4 +242,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { documentUpload }
-)(withRouter(InfoDocument));
+)(withRouter(AdminInfoDocument));

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Moment from "react-moment";
+import { Link } from "react-router-dom";
 
 import visa from "../../../assets/img/logos/payment/visa.png";
 import ltc from "../../../assets/img/logos/payment/LTC.png";
@@ -50,6 +51,14 @@ export default class RequestItem extends Component {
           <td>
             <Moment format="DD.MM.YYYY">{token.date}</Moment>
           </td>
+          <td>
+            <Link
+              to={`/admin/transaction/${token._id}`}
+              class="text-warning font-16"
+            >
+              <i className="fa fa-edit" />
+            </Link>
+          </td>
         </tr>
       );
     });
@@ -63,6 +72,7 @@ export default class RequestItem extends Component {
             <th>Status</th>
             <th>Document</th>
             <th>Date</th>
+            <th className="no-sort" />
           </tr>
         </thead>
         <tbody>{transaction}</tbody>

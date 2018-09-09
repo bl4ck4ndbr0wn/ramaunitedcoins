@@ -38,11 +38,14 @@ import CreateProfile from "./components/create-profile/CreateProfile";
 import BuyToken from "./components/user/request/BuyToken";
 import EditProfile from "./components/edit-profile/EditProfile";
 import InfoDocument from "./components/user/request/InfoDocument";
+
+import AdminInfoDocument from "./components/admin/request/AdminInfoDocument";
 import TransactionHistory from "./components/transactionHistory/TransactionHistory";
 import MyReferrals from "./components/referrals/Index";
 import AdminRequestList from "./components/admin/request/RequestList";
 import HistoryLogs from "./components/admin/history/HistoryLogs";
 import Commission from "./components/admin/report/Commission";
+import EditTransaction from "./components/admin/request/edit-request/EditTransaction";
 
 class App extends Component {
   render() {
@@ -223,11 +226,26 @@ class App extends Component {
                   component={RequestToken}
                 />
               </Switch>
+
+              <Switch>
+                <AdminPrivateRoute
+                  exact
+                  path="/admin/request/document/:id"
+                  component={AdminInfoDocument}
+                />
+              </Switch>
               <Switch>
                 <AdminPrivateRoute
                   exact
                   path="/admin/requests/all"
                   component={AdminRequestList}
+                />
+              </Switch>
+              <Switch>
+                <AdminPrivateRoute
+                  exact
+                  path="/admin/transaction/:id"
+                  component={EditTransaction}
                 />
               </Switch>
 

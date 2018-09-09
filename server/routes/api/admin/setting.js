@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const axios = require("axios");
+const fetch = require("node-fetch");
 
 // Round model
 const Round = require("../../../models/Round");
@@ -38,34 +39,39 @@ router.get(
           return res.status(404).json(errors);
         }
 
+        let dict = [];
         account.map(acc => {
-          let type = acc.type;
-          let dict = [];
+          let type = acc.type.toLowerCase();
 
-          axios
-            .get(`https://api.coinmarketcap.com/v2/ticker/1/?convert=ETH`)
-            .then(response => {
-              // loop over values
-              let quotes = response.data.quotes;
-              if (quotes !== undefined) {
-                let coinPrice = quotes["ETH"].price;
-                let usdPrice = quote[USD].price;
-                let price = usdPrice / coinPrice;
-                dict["ETH"] = price;
-              }
+          let t = {
+            ticker: {
+              base: "BTC",
+              target: "USD",
+              price: "6409.91448965",
+              volume: "33191.67141242",
+              change: "-2.15851384"
+            }
+          };
 
-              //   let coinPrice = quotes[type].price;
-              //   let usdPrice = quotes.USD.price;
+          const url = `https://api.cryptonator.com/api/ticker/${type}-usd`;
 
-              //   let price = usdPrice / coinPrice;
-              //   dict["ETH"] = price;
-            })
-            .catch(err => {
-              console.log(err);
-            });
+          console.log(exchange_rates(url));
 
-          console.log(dict);
+          // axios
+          //   .get(`https://api.cryptonator.com/api/ticker/${type}-usd`)
+          //   .then(response => {
+          //     let ticker = response.data.ticker;
+          //     let base = ticker.base;
+          //     let price = ticker.price;
+          //     let change = ticker.change;
+          //     console.log({
+          //       base,
+          //       price,
+          //       change
+          //     });
+          //   });
         });
+        console.log(dict);
 
         Round.find()
           .then(round => {
@@ -84,6 +90,40 @@ router.get(
       );
   }
 );
+
+const exchange_rates = async url => {
+  // axios
+  //   .get(`https://api.cryptonator.com/api/ticker/${type}-usd`)
+  //   .then(response => {
+  //     let ticker = response.data.ticker;
+  //     let base = ticker.base;
+  //     let price = ticker.price;
+  //     let change = ticker.change;
+  //     console.log({
+  //       base,
+  //       price,
+  //       change
+  //     });
+  //   });
+
+  fetch(url)
+    .then(response => response.json())
+    .then(responseData => {
+      let ticker = responseData.ticker;
+      let base = ticker.base;
+      let price = ticker.price;
+      let change = ticker.change;
+
+      return {
+        base,
+        price,
+        change
+      };
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
 
 // @route   POST /api/v1/admin/setting/account
 // @desc    Create Setting

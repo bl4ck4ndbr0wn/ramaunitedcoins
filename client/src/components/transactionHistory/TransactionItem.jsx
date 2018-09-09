@@ -91,11 +91,6 @@ export default class TransactionItem extends Component {
           <td>
             <Moment format="DD.MM.YYYY">{token.date}</Moment>
           </td>
-          <td>
-            <Link to={`/transaction/${token._id}`} lass="text-muted font-16">
-              <i className="fa fa-edit" />
-            </Link>
-          </td>
         </tr>
       );
     });
