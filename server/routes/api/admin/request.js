@@ -9,6 +9,8 @@ const Request = require("../../../models/Request");
 const Profile = require("../../../models/Profile");
 // Load User Model
 const User = require("../../../models/User");
+//lad Commission Model
+const Commission = require("../../../models/Commission");
 
 // Validation
 const validateAdminTokenRequestInput = require("../../../validation/tokenRequest");
@@ -83,7 +85,9 @@ router.post(
       user: req.body.user,
       modetransfer: req.body.modetransfer,
       amount: req.body.amount,
-      confirmed: req.body.confirmed
+      confirmed: req.body.confirmed,
+      price: req.body.price,
+      bonus: req.body.bonus
     };
     const newToken = new Request(tokenFields);
 
@@ -95,6 +99,53 @@ router.post(
           .status(404)
           .json({ tokennotsaved: "Failed to save Token :: " + err })
       );
+  }
+);
+
+//@route POST api/v1/admin/request/confirm/:id
+// @desc    Confirm payment
+// @access  Private(admin)
+router.post(
+  "/confirm/:id",
+  passport.authenticate("jwt", { session: false }),
+  authorize("admin"),
+  (req, res) => {
+    User.findById(req.user.id)
+      .then(user => {
+        if (user.role === "admin") {
+          Request.findById(req.params.id)
+            .then(token => {
+              // Check if already confirmed
+              if (token.confirmed) {
+                token.confirmed = false;
+
+                token.save().then(tokens => res.json(tokens));
+              } else {
+                token.confirmed = true;
+
+                Commission.findOne({ isActive: true }).then(commission => {
+                  if (commission.type === "RUC") {
+                    let ruc;
+                    ruc = (token.ruc * commission.percentage) / 100;
+                    token.ruc = token.ruc + ruc;
+
+                    token.save().then(tokens => res.json(tokens));
+                  } else if (commission.type === "RCC") {
+                    let rcc;
+                    rcc = (token.rcc * commission.percentage) / 100;
+                    token.rcc = token.rcc + rcc;
+
+                    token.save().then(tokens => res.json(tokens));
+                  }
+                });
+              }
+            })
+            .catch(err =>
+              res.status(404).json({ tokennotfound: "No Token found" })
+            );
+        }
+      })
+      .catch(err => res.status(404).json({ usernotfound: "No User found" }));
   }
 );
 

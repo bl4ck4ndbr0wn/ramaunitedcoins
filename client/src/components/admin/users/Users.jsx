@@ -28,29 +28,29 @@ class Users extends Component {
 
     return (
       <PageContent>
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">Admin</a>
                   </li>
-                  <li class="breadcrumb-item">
+                  <li className="breadcrumb-item">
                     <a href="#">Users</a>
                   </li>
-                  <li class="breadcrumb-item active">All Users</li>
+                  <li className="breadcrumb-item active">All Users</li>
                 </ol>
               </div>
-              <h4 class="page-title">All Users</h4>
+              <h4 className="page-title">All Users</h4>
             </div>
           </div>
         </div>
         {/* <!-- end page title end breadcrumb --> */}
 
-        <div class="row">
-          <div class="col-12">
-            <div class="card m-b-30">{userList}</div>
+        <div className="row">
+          <div className="col-12">
+            <div className="card m-b-30">{userList}</div>
           </div>
         </div>
       </PageContent>

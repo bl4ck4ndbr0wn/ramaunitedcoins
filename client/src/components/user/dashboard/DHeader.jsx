@@ -11,43 +11,35 @@ const DHeader = ({ profile, settings }) => {
 
   console.log(round);
   return (
-    <div class="row justify-content-center">
-      <div class="col-md-5 col-xl-5">
-        <div class="mini-stat clearfix bg-white">
-          <span class="mini-stat-icon bg-light">
-            <i class="mdi mdi-currency-usd text-danger" />
+    <div className="row justify-content-center">
+      <div className="col-md-4 col-xl-4">
+        <div className="mini-stat clearfix bg-white">
+          <span className="mini-stat-icon bg-light">
+            <i className="mdi mdi-currency-usd text-danger" />
           </span>
-          <div class="mini-stat-info text-right text-muted">
-            <span class="counter text-danger">{profile.amount}</span>
+          <div className="mini-stat-info text-right text-muted">
+            <span className="counter text-danger">{profile.amount}</span>
             Total RCC
           </div>
-
-          <p class="mb-0 m-t-20 text-muted">
-            Price per coin: ${round.price}{" "}
-            <span class="pull-right">
-              <i class="fa fa-caret-up m-r-5" />
-              {round.bonus}% bonus
-            </span>
-          </p>
-        </div>
-      </div>
-      <div class="col-md-5 col-xl-5">
-        <div class="mini-stat clearfix bg-success">
-          <span class="mini-stat-icon bg-light">
-            <i class="mdi mdi-currency-usd text-success" />
-          </span>
-          <div class="mini-stat-info text-right  text-white">
-            <span class="counter text-info">{ruc}</span>
+          <div className="mini-stat-info text-right  text-muted">
+            <span className="counter text-info">{ruc}</span>
             Total RUC
           </div>
-
-          <p class="mb-0 m-t-20 text-white">
-            Price per coin: ${round.price}{" "}
-            <span class="pull-right">
-              <i class="fa fa-caret-up m-r-5" />
-              {round.bonus}% bonus
-            </span>
-          </p>
+        </div>
+      </div>
+      <div className="col-md-4 col-xl-4">
+        <div className="mini-stat clearfix bg-success">
+          <span className="mini-stat-icon bg-light">
+            <i className="mdi mdi-currency-usd text-success" />
+          </span>
+          <div className="mini-stat-info text-right  text-white">
+            <span className="counter text-info">${round.price}</span>
+            Price per coin
+          </div>
+          <div className="mini-stat-info text-right  text-white">
+            <span className="counter text-danger">{round.bonus}%</span>
+            bonus
+          </div>
         </div>
       </div>
     </div>

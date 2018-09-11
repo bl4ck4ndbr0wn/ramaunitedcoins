@@ -8,10 +8,13 @@ const fetch = require("node-fetch");
 const Round = require("../../../models/Round");
 // Account model
 const Account = require("../../../models/Account");
+// Commission Model
+const Commission = require("../../../models/Commission");
 
 // Load Validation
 const validateRoundInput = require("../../../validation/round");
 const validateAccountInput = require("../../../validation/account");
+const validateCommissionInput = require("../../../validation/commission");
 
 // Check if user is Admins
 const authorize = require("../../../utils/authorize");
@@ -39,47 +42,26 @@ router.get(
           return res.status(404).json(errors);
         }
 
-        let dict = [];
-        account.map(acc => {
-          let type = acc.type.toLowerCase();
-
-          let t = {
-            ticker: {
-              base: "BTC",
-              target: "USD",
-              price: "6409.91448965",
-              volume: "33191.67141242",
-              change: "-2.15851384"
-            }
-          };
-
-          const url = `https://api.cryptonator.com/api/ticker/${type}-usd`;
-
-          console.log(exchange_rates(url));
-
-          // axios
-          //   .get(`https://api.cryptonator.com/api/ticker/${type}-usd`)
-          //   .then(response => {
-          //     let ticker = response.data.ticker;
-          //     let base = ticker.base;
-          //     let price = ticker.price;
-          //     let change = ticker.change;
-          //     console.log({
-          //       base,
-          //       price,
-          //       change
-          //     });
-          //   });
-        });
-        console.log(dict);
-
         Round.find()
           .then(round => {
             if (!round) {
               errors.noround = "There are no Rounds";
               return res.status(404).json(errors);
             }
-            res.json({ account, round });
+
+            Commission.find()
+              .then(commission => {
+                if (!commission) {
+                  errors.nocommission = "There are no commissions";
+                  return res.status(404).json(errors);
+                }
+                res.json({ account, round, commission });
+              })
+              .catch(err =>
+                res
+                  .status(404)
+                  .json({ nocommissionfound: "No Commissions found" })
+              );
           })
           .catch(err =>
             res.status(404).json({ noroundsfound: "No Round found" })
@@ -90,40 +72,6 @@ router.get(
       );
   }
 );
-
-const exchange_rates = async url => {
-  // axios
-  //   .get(`https://api.cryptonator.com/api/ticker/${type}-usd`)
-  //   .then(response => {
-  //     let ticker = response.data.ticker;
-  //     let base = ticker.base;
-  //     let price = ticker.price;
-  //     let change = ticker.change;
-  //     console.log({
-  //       base,
-  //       price,
-  //       change
-  //     });
-  //   });
-
-  fetch(url)
-    .then(response => response.json())
-    .then(responseData => {
-      let ticker = responseData.ticker;
-      let base = ticker.base;
-      let price = ticker.price;
-      let change = ticker.change;
-
-      return {
-        base,
-        price,
-        change
-      };
-    })
-    .catch(error => {
-      console.log(error);
-    });
-};
 
 // @route   POST /api/v1/admin/setting/account
 // @desc    Create Setting
@@ -248,6 +196,54 @@ router.post(
               );
           }
         });
+      }
+    });
+  }
+);
+
+// @route   POST /api/v1/admin/setting/commission
+// @desc    Create Setting commission
+// @access  Private
+router.post(
+  "/commission",
+  passport.authenticate("jwt", { session: false }),
+  authorize("admin"),
+  (req, res) => {
+    const { errors, isValid } = validateCommissionInput(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      // If any errors, send 400 with errors object
+      return res.status(400).json(errors);
+    }
+
+    // Get fields
+    const commissionFields = {};
+
+    commissionFields.user = req.user.id;
+    if (req.body.type) commissionFields.type = req.body.type;
+    if (req.body.percentage) commissionFields.percentage = req.body.percentage;
+    if (req.body.isActive) commissionFields.isActive = req.body.isActive;
+
+    // Add to commissions array
+    Commission.findOne({ type: req.body.type }).then(commission => {
+      if (commission) {
+        //update
+        Commission.findOneAndUpdate(
+          { type: req.body.type },
+          { $set: commissionFields },
+          { new: true }
+        ).then(commission => {
+          res.json(commission);
+        });
+      } else {
+        //Create commission
+        new Commission(commissionFields)
+          .save()
+          .then(commission => res.json(commission))
+          .catch(err =>
+            res.statusCode(404).send({ msg: "Unable to Save commission." })
+          );
       }
     });
   }

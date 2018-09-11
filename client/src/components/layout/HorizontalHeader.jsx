@@ -87,10 +87,10 @@ class HorizontalHeader extends Component {
               </Link>
             </li>
             <li>
-              <Link to="/admin/settings/rounds">Add Investor Round.</Link>
+              <Link to="/admin/settings/rounds">Add Investor Round</Link>
             </li>
             <li>
-              <Link to="/admin/settings/commission">Commissions</Link>
+              <Link to="/admin/settings/commission">Add Commissions</Link>
             </li>
           </ul>
         </li>
@@ -243,61 +243,6 @@ class HorizontalHeader extends Component {
                   </a>
                 </li> */}
                 {/* <!-- notification--> */}
-                {Object.keys(profile).length > 0 ? (
-                  <li class="menu-item list-inline-item text-white">
-                    Ballance : {profile.amount} $
-                  </li>
-                ) : (
-                  <li class="menu-item list-inline-item text-white">
-                    Ballance : 0 $
-                  </li>
-                )}
-
-                <li className="list-inline-item dropdown notification-list">
-                  <a
-                    className="nav-link dropdown-toggle arrow-none waves-effect"
-                    data-toggle="dropdown"
-                    href="#"
-                    role="button"
-                    aria-haspopup="false"
-                    aria-expanded="false"
-                  >
-                    <i className="mdi mdi-bell-outline noti-icon" />
-                    <span className="badge badge-danger noti-icon-badge">
-                      3
-                    </span>
-                  </a>
-                  <div className="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg">
-                    {/* <!-- item--> */}
-                    <div className="dropdown-item noti-title">
-                      <h5>Notification (3)</h5>
-                    </div>
-
-                    {/* <!-- item--> */}
-                    <a
-                      href="javascript:void(0);"
-                      className="dropdown-item notify-item active"
-                    >
-                      <div className="notify-icon bg-success">
-                        <i className="mdi mdi-cart-outline" />
-                      </div>
-                      <p className="notify-details">
-                        <b>Your order is placed</b>
-                        <small className="text-muted">
-                          Dummy text of the printing and typesetting industry.
-                        </small>
-                      </p>
-                    </a>
-
-                    {/* <!-- All--> */}
-                    <a
-                      href="javascript:void(0);"
-                      className="dropdown-item notify-item"
-                    >
-                      View All
-                    </a>
-                  </div>
-                </li>
                 {/* <!-- User--> */}
                 <li className="list-inline-item dropdown notification-list">
                   <a

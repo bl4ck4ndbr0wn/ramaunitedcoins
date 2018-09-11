@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 
+import { confrimRequest } from "../../../../actions/admin/requestAction";
+
 class DocumentDetails extends Component {
   constructor(props) {
     super(props);
@@ -12,65 +14,73 @@ class DocumentDetails extends Component {
     };
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
+  onConfirm(id) {
+    this.props.confrimRequest(id);
   }
 
   render() {
+    const { token } = this.props;
+
     let documentList;
-    if (Object.keys(this.props.token.document).length > 0) {
-      documentList = this.props.token.document.map(doc => (
+    if (Object.keys(token.document).length > 0) {
+      documentList = token.document.map(doc => (
         <tr>
           <td>{doc.originalname}</td>
-          <td class="text-center">
+          <td className="text-center">
             <Moment format="YYYY/MMM/DD HH:mm">{doc.date}</Moment>
+          </td>
+          <td>
+            <Link to={doc.path} download={doc.originalname}>
+              Click to download
+            </Link>
           </td>
         </tr>
       ));
     } else {
       documentList = (
         <tr>
-          <td class="no-line">No Documents Uploaded</td>
+          <td className="no-line">No Documents Uploaded</td>
         </tr>
       );
     }
 
     return (
-      <div class="col-12">
-        <div class="panel panel-default">
-          <div class="p-2">
-            <h3 class="panel-title font-20">
+      <div className="col-12">
+        <div className="panel panel-default">
+          <div className="p-2">
+            <h3 className="panel-title font-20">
               <strong>Document summary</strong>
             </h3>
           </div>
-          <div class="">
-            <div class="table-responsive">
-              <table class="table">
+          <div className="">
+            <div className="table-responsive">
+              <table className="table">
                 <thead>
                   <tr>
                     <td>
                       <strong>Name</strong>
                     </td>
-                    <td class="text-center">
+                    <td className="text-center">
                       <strong>date</strong>
                     </td>
+                    <td />
                   </tr>
                 </thead>
                 <tbody>
                   {documentList}
                   <tr>
-                    <td class="no-line" />
-                    <td class="no-line text-right">
+                    <td className="no-line" />
+                    <td className="no-line text-right">
                       <strong>Total</strong>
-                      <h4 class="m-0">${this.props.token.amount}</h4>
+                      <h4 className="m-0">${token.amount}</h4>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
-            <div class="d-print-none mo-mt-2">
-              <div class="pull-right">
+            <div className="d-print-none mo-mt-2">
+              <div className="pull-right">
                 <button
                   type="button"
                   onClick={() => {
@@ -84,45 +94,61 @@ class DocumentDetails extends Component {
                   data-toggle="modal"
                   data-target=".bs-approval-modal-center"
                 >
-                  {this.props.token.confirmed ? "Cancel" : "Approve"}{" "}
-                  Transaction
+                  {token.confirmed ? "Cancel" : "Approve"} Transaction
                 </button>
                 <div
-                  class="modal fade bs-approval-modal-center"
+                  className="modal fade bs-approval-modal-center"
                   tabindex="-1"
                   role="dialog"
                   aria-labelledby="mySmallModalLabel"
                   aria-hidden="true"
                 >
-                  <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title mt-0">
-                          {this.props.token.confirmed ? "Cancel" : "Approve"}{" "}
-                          Transaction
+                  <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title mt-0">
+                          {token.confirmed ? "Cancel" : "Approve"} Transaction
                         </h5>
                         <button
                           type="button"
-                          class="close"
+                          className="close"
                           data-dismiss="modal"
                           aria-hidden="true"
                         >
                           ×
                         </button>
                       </div>
-                      {this.props.token.confirmed ? (
-                        <div class="modal-body">
+                      {token.confirmed ? (
+                        <div className="modal-body">
                           <p>
                             Are u sure you want to <strong>Cancel</strong> this
                             transaction?
                           </p>
+                          <button
+                            type="button"
+                            className="close"
+                            data-dismiss="modal"
+                            aria-hidden="true"
+                            onClick={this.onConfirm.bind(this, token._id)}
+                          >
+                            Approve Payment
+                          </button>
                         </div>
                       ) : (
-                        <div class="modal-body">
+                        <div className="modal-body">
                           <p>
                             Are u sure you want to <strong>Approve</strong> this
                             transaction?
                           </p>
+                          <button
+                            type="button"
+                            className="close"
+                            data-dismiss="modal"
+                            aria-hidden="true"
+                            onClick={this.onConfirm.bind(this, token._id)}
+                          >
+                            Approve Payment
+                          </button>
                         </div>
                       )}
                     </div>
@@ -140,6 +166,12 @@ class DocumentDetails extends Component {
   }
 }
 
-DocumentDetails.propTypes = {};
+DocumentDetails.propTypes = {
+  confrimRequest: PropTypes.func.isRequired,
+  token: PropTypes.object.isRequired
+};
 
-export default DocumentDetails;
+export default connect(
+  null,
+  { confrimRequest }
+)(DocumentDetails);

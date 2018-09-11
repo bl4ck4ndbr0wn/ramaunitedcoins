@@ -113,37 +113,37 @@ class AdminInfoDocument extends Component {
 
     return (
       <PageContent>
-        <div class="row">
-          <div class="col-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">User</a>
                   </li>
-                  <li class="breadcrumb-item">
+                  <li className="breadcrumb-item">
                     <a href="#">Request</a>
                   </li>
-                  <li class="breadcrumb-item active">Request RCC Tokens</li>
+                  <li className="breadcrumb-item active">Request RCC Tokens</li>
                 </ol>
               </div>
-              <h4 class="page-title">Request RCC Tokens</h4>
+              <h4 className="page-title">Request RCC Tokens</h4>
             </div>
           </div>
         </div>
         {/* <!-- end page title end breadcrumb --> */}
 
-        <div class="row justify-content-md-center">
-          <div class="col-10">
-            <div class="card m-b-30">
-              <div class="card-body">
-                <h4 class="mt-0 header-title">Upload Documents</h4>
+        <div className="row justify-content-md-center">
+          <div className="col-10">
+            <div className="card m-b-30">
+              <div className="card-body">
+                <h4 className="mt-0 header-title">Upload Documents</h4>
                 <p className=" text-center ">
                   Upload bank receipt/ any screenshot of proof – <br />
                   If paid by ETH or BTC/ LTC / please take a screenshot of
                   transaction ID code.
                 </p>
-                <form class="" onSubmit={this.onSubmit}>
+                <form className="" onSubmit={this.onSubmit}>
                   <div className="form-group text-center row m-t-30">
                     {alertItem}
                     <div className="col-12">
@@ -212,9 +212,9 @@ class AdminInfoDocument extends Component {
               </div>
             </div>
           </div>
-          <div class="col-12">
-            <div class="card m-b-30">
-              <div class="card-body">
+          <div className="col-12">
+            <div className="card m-b-30">
+              <div className="card-body">
                 <p className="header-title text-center ">Uploaded Documents</p>
                 {documenContent}
               </div>

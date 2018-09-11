@@ -12,8 +12,24 @@ const RequestSchema = new Schema({
     required: true
   },
   amount: {
-    type: String,
-    required: true
+    type: Number,
+    default: 0
+  },
+  ruc: {
+    type: Number,
+    default: 0
+  },
+  rcc: {
+    type: Number,
+    default: 0
+  },
+  price: {
+    type: Number,
+    default: 0
+  },
+  bonus: {
+    type: Number,
+    default: 0
   },
   confirmed: {
     type: Boolean,

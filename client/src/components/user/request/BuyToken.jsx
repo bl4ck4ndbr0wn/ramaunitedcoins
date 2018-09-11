@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import { withRouter, Link } from "react-router-dom";
 import QRCode from "qrcode.react";
 
 import { createToken } from "../../../actions/tokenActions";
-import { getSettings } from "../../../actions/admin/settingAction";
+import {
+  getSettings,
+  fetchExchange
+} from "../../../actions/admin/settingAction";
 
 import PageContent from "../../layout/PageContent";
 import SelectListGroup from "../../common/SelectListGroup";
@@ -36,8 +40,11 @@ class BuyToken extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
   componentDidMount() {
-    this.props.getSettings();
+    const { getSettings, fetchExchange } = this.props;
+
+    getSettings();
   }
+
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -47,8 +54,11 @@ class BuyToken extends Component {
       this.setState({ errors: nextProps.errors });
     }
 
+    console.log(nextState);
+
     if (nextProps.setting.settings) {
       const setting = nextProps.setting.settings;
+
       const account = setting.account.find(
         account => account.isActive === true
       );
@@ -69,9 +79,14 @@ class BuyToken extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    const { modetransfer, amount } = this.state;
+    const { modetransfer, amount, price, bonus } = this.state;
 
-    const tokenData = { modetransfer, amount };
+    const tokenData = {
+      modetransfer,
+      amount,
+      price,
+      bonus
+    };
 
     this.props.createToken(tokenData, this.props.history);
   }
@@ -85,8 +100,8 @@ class BuyToken extends Component {
       modetransfer,
       currentRate
     } = this.state;
-    const { settings, loading } = this.props.setting;
-
+    const { settings, exchange, loading } = this.props.setting;
+    console.log(exchange);
     let image;
     let symbol;
     let tokenInfo;
@@ -132,17 +147,17 @@ class BuyToken extends Component {
           modetransfer === "Bank" ? (
             ""
           ) : (
-            <div class="col-md-6 col-xl-6">
-              <div class="mini-stat clearfix bg-info">
-                <span class="mini-stat-icon bg-light">
+            <div className="col-md-6 col-xl-6">
+              <div className="mini-stat clearfix bg-info">
+                <span className="mini-stat-icon bg-light">
                   <img src={image} alt="image" width="60" />
                 </span>
-                <div class="mini-stat-info text-right text-light">
-                  <span class="counter text-white">0 RCC</span>0 RUC
+                <div className="mini-stat-info text-right text-light">
+                  <span className="counter text-white">0 RCC</span>0 RUC
                 </div>
                 <div className="d-flex justify-content-between">
-                  <div class="">
-                    <span class="text-white">
+                  <div className="">
+                    <span className="text-white">
                       Bank in to this company {modetransfer} address.
                     </span>
                     <TextFieldGroup
@@ -165,7 +180,7 @@ class BuyToken extends Component {
                 </div>
 
                 <div className="d-flex justify-content-between">
-                  <div class="mini-stat-info  text-light">
+                  <div className="mini-stat-info  text-light">
                     1 {symbol} : $10 USD
                   </div>
                 </div>
@@ -177,31 +192,31 @@ class BuyToken extends Component {
 
     return (
       <PageContent>
-        <div class="row">
-          <div class="col-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">User</a>
                   </li>
-                  <li class="breadcrumb-item">
+                  <li className="breadcrumb-item">
                     <a href="#">Request</a>
                   </li>
-                  <li class="breadcrumb-item active">Request RCC Tokens</li>
+                  <li className="breadcrumb-item active">Request RCC Tokens</li>
                 </ol>
               </div>
-              <h4 class="page-title">Request RCC Tokens</h4>
+              <h4 className="page-title">Request RCC Tokens</h4>
             </div>
           </div>
         </div>
         {/* <!-- end page title end breadcrumb --> */}
 
-        <div class="row justify-content-md-center">
+        <div className="row justify-content-md-center">
           {tokenInfo}
           <div
-            // class="col-8"
-            class={
+            // className="col-8"
+            className={
               isEmpty(modetransfer) ||
               modetransfer === "0" ||
               modetransfer === "Bank"
@@ -209,10 +224,10 @@ class BuyToken extends Component {
                 : `col-md-6 col-xl-6`
             }
           >
-            <div class="card m-b-30">
-              <div class="card-body">
-                <h4 class="mt-0 header-title">Create Profile</h4>
-                <form class="" onSubmit={this.onSubmit}>
+            <div className="card m-b-30">
+              <div className="card-body">
+                <h4 className="mt-0 header-title">Create Profile</h4>
+                <form className="" onSubmit={this.onSubmit}>
                   <div className="form-group text-center row m-t-30">
                     <div className="col-12">
                       <SelectListGroup
@@ -253,6 +268,30 @@ class BuyToken extends Component {
                         }
                       />
                     </div>
+                    <div className="col-6">
+                      <TextFieldGroup
+                        placeholder={`Price per coin in $.`}
+                        type="number"
+                        name="price"
+                        value={this.state.price}
+                        onChange={this.onChange}
+                        error={errors.price}
+                        disabled="disabled"
+                        info={`Investor price per coin in $.`}
+                      />
+                    </div>
+                    <div className="col-6">
+                      <TextFieldGroup
+                        placeholder={`Bonus percentage.`}
+                        type="number"
+                        name="bonus"
+                        value={this.state.bonus}
+                        onChange={this.onChange}
+                        error={errors.bonus}
+                        disabled="disabled"
+                        info={`Investor Bonus in %.`}
+                      />
+                    </div>
 
                     <div className="col-12">
                       <button
@@ -274,6 +313,7 @@ class BuyToken extends Component {
 }
 
 BuyToken.propTypes = {
+  fetchExchange: PropTypes.func.isRequired,
   getSettings: PropTypes.func.isRequired,
   createToken: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
@@ -286,7 +326,18 @@ const mapStateToProps = state => ({
   profile: state.profile,
   errors: state.errors
 });
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      createToken,
+      getSettings,
+      fetchExchange
+    },
+    dispatch
+  );
+
 export default connect(
   mapStateToProps,
-  { createToken, getSettings }
-)(withRouter(BuyToken));
+  mapDispatchToProps
+)(BuyToken);

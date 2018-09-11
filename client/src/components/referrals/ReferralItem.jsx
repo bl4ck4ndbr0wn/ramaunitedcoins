@@ -16,7 +16,7 @@ export default class ReferralItem extends Component {
       );
     });
     return (
-      <table id="datatable" class="table table-bordered">
+      <table id="datatable" className="table table-bordered">
         <thead>
           <tr>
             <th>Handle</th>

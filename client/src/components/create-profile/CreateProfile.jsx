@@ -54,32 +54,32 @@ class CreateProfile extends Component {
 
     return (
       <PageContent>
-        <div class="row">
-          <div class="col-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">User</a>
                   </li>
-                  <li class="breadcrumb-item">
+                  <li className="breadcrumb-item">
                     <a href="#">Profile</a>
                   </li>
-                  <li class="breadcrumb-item active">Create Profile</li>
+                  <li className="breadcrumb-item active">Create Profile</li>
                 </ol>
               </div>
-              <h4 class="page-title">Create Profile</h4>
+              <h4 className="page-title">Create Profile</h4>
             </div>
           </div>
         </div>
         {/* <!-- end page title end breadcrumb --> */}
 
-        <div class="row justify-content-md-center">
-          <div class="col-8">
-            <div class="card m-b-30">
-              <div class="card-body">
-                <h4 class="mt-0 header-title">Create Profile</h4>
-                <form class="" onSubmit={this.onSubmit}>
+        <div className="row justify-content-md-center">
+          <div className="col-8">
+            <div className="card m-b-30">
+              <div className="card-body">
+                <h4 className="mt-0 header-title">Create Profile</h4>
+                <form className="" onSubmit={this.onSubmit}>
                   <div className="form-group text-center row m-t-30">
                     <div className="col-6">
                       <TextFieldGroup

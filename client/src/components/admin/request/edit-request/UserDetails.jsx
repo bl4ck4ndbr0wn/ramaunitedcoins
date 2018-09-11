@@ -3,18 +3,18 @@ import Moment from "react-moment";
 
 export default ({ token }) => {
   return (
-    <div class="col-12">
-      <div class="invoice-title">
-        <h4 class="pull-right font-16">
+    <div className="col-12">
+      <div className="invoice-title">
+        <h4 className="pull-right font-16">
           <strong>Order # {token._id}</strong>
         </h4>
-        <h3 class="m-t-0">
+        <h3 className="m-t-0">
           <img src={token.user.avatar} alt="logo" height="32" />
         </h3>
       </div>
       <hr />
-      <div class="row">
-        <div class="col-6">
+      <div className="row">
+        <div className="col-6">
           <address>
             <strong>Billed To:</strong>
             <br />
@@ -27,7 +27,7 @@ export default ({ token }) => {
             {token.user.role}
           </address>
         </div>
-        <div class="col-6 text-right">
+        <div className="col-6 text-right">
           <address>
             <strong>Approval:</strong>
             <br />
@@ -36,12 +36,12 @@ export default ({ token }) => {
             email:
             <br />{" "}
             {token.confirmed ? (
-              <a href="#" class="btn btn-success waves-effect waves-l ight">
-                <i class="fa fa-print" /> Approved
+              <a href="#" className="btn btn-success waves-effect waves-l ight">
+                <i className="fa fa-print" /> Approved
               </a>
             ) : (
-              <a href="#" class="btn btn-success waves-effect waves-l ight">
-                <i class="fa fa-print" /> Pending
+              <a href="#" className="btn btn-success waves-effect waves-l ight">
+                <i className="fa fa-print" /> Pending
               </a>
             )}
             <br />
@@ -49,8 +49,8 @@ export default ({ token }) => {
           </address>
         </div>
       </div>
-      <div class="row">
-        <div class="col-6 m-t-30">
+      <div className="row">
+        <div className="col-6 m-t-30">
           <address>
             <strong>Payment Method:</strong>
             <br />
@@ -59,7 +59,7 @@ export default ({ token }) => {
             {token.user.email}
           </address>
         </div>
-        <div class="col-6 m-t-30 text-right">
+        <div className="col-6 m-t-30 text-right">
           <address>
             <strong>Order Date:</strong>
             <br />

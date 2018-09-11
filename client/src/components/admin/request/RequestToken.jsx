@@ -24,6 +24,8 @@ class RequestToken extends Component {
       address: "",
       user: "",
       confirmed: false,
+      price: "",
+      bonus: "",
       errors: {}
     };
 
@@ -48,8 +50,6 @@ class RequestToken extends Component {
       const round = setting.round.find(round => round.isActive === true);
       // If account field doesnt exist, make empty string
       account.address = !isEmpty(account.address) ? account.address : "";
-      // If round field doesnt exist, make empty string
-      round.address = !isEmpty(round.address) ? round.address : "";
 
       // Set component fields state
       this.setState({
@@ -66,19 +66,21 @@ class RequestToken extends Component {
     e.preventDefault();
 
     this.setState({ errors: {} });
-    const { modetransfer, amount, user, confirmed } = this.state;
+    const { modetransfer, amount, user, confirmed, price, bonus } = this.state;
 
     const tokenData = {
       modetransfer,
       amount,
       user,
-      confirmed
+      confirmed,
+      price,
+      bonus
     };
 
     this.props.requestTokens(tokenData, this.props.history);
   }
   render() {
-    const { errors, modetransfer } = this.state;
+    const { errors, modetransfer, price, bonus } = this.state;
     const { users, loading } = this.props.userAdmin;
     const { settings } = this.props.setting;
 
@@ -136,46 +138,48 @@ class RequestToken extends Component {
           this.state.modetransfer === "Bank" ? (
             ""
           ) : (
-            <TextFieldGroup
-              placeholder={`Company ${modetransfer} Address.`}
-              type="number"
-              name="address"
-              value={result.address}
-              onChange={this.onChange}
-              disabled="disabled"
-              info={` Bank in to this company ${modetransfer} address.`}
-            />
+            <div className="col-6">
+              <TextFieldGroup
+                placeholder={`Company ${modetransfer} Address.`}
+                type="number"
+                name="address"
+                value={result.address}
+                onChange={this.onChange}
+                disabled="disabled"
+                info={` Bank in to this company ${modetransfer} address.`}
+              />
+            </div>
           );
       }
     }
     return (
       <PageContent>
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">Admin</a>
                   </li>
-                  <li class="breadcrumb-item">
+                  <li className="breadcrumb-item">
                     <a href="#">Request</a>
                   </li>
-                  <li class="breadcrumb-item active">Request Token</li>
+                  <li className="breadcrumb-item active">Request Token</li>
                 </ol>
               </div>
-              <h4 class="page-title">Request Token</h4>
+              <h4 className="page-title">Request Token</h4>
             </div>
           </div>
         </div>
         {/* <!-- end page title end breadcrumb --> */}
 
-        <div class="row justify-content-md-center">
-          <div class="col-8">
-            <div class="card m-b-30">
-              <div class="card-body">
-                <h4 class="mt-0 header-title">New Token Request</h4>
-                <form class="" onSubmit={this.onSubmit}>
+        <div className="row justify-content-md-center">
+          <div className="col-8">
+            <div className="card m-b-30">
+              <div className="card-body">
+                <h4 className="mt-0 header-title">New Token Request</h4>
+                <form className="" onSubmit={this.onSubmit}>
                   <div className="form-group text-center row m-t-20">
                     <div className="col-12">
                       <SelectListGroup
@@ -189,7 +193,7 @@ class RequestToken extends Component {
                       />
                     </div>
                     <div
-                      class={
+                      className={
                         isEmpty(modetransfer) ||
                         modetransfer === "0" ||
                         modetransfer === "Bank"
@@ -207,7 +211,29 @@ class RequestToken extends Component {
                         info="Give us an idea of mode of transfer"
                       />
                     </div>
-                    <div className="col-6">{tokenInfo}</div>
+                    {tokenInfo}
+                    <div className="col-6">
+                      <TextFieldGroup
+                        placeholder={`Price per coin in $.`}
+                        type="number"
+                        name="price"
+                        value={price}
+                        onChange={this.onChange}
+                        error={errors.price}
+                        info={`Investor price per coin.`}
+                      />
+                    </div>
+                    <div className="col-6">
+                      <TextFieldGroup
+                        placeholder={`Bonus percentage.`}
+                        type="number"
+                        name="bonus"
+                        value={bonus}
+                        onChange={this.onChange}
+                        error={errors.bonus}
+                        info={`Investor Bonus.`}
+                      />
+                    </div>
                     <div className="col-12">
                       <TextFieldGroup
                         placeholder={
@@ -236,7 +262,7 @@ class RequestToken extends Component {
                       />
                     </div>
                     <div className="col-12">
-                      <div class="m-b-30">
+                      <div className="m-b-30">
                         <div className="custom-control custom-checkbox">
                           <input
                             type="checkbox"

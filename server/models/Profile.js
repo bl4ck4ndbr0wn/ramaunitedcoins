@@ -24,6 +24,18 @@ const ProfileSchema = new Schema({
     type: Number,
     default: 0
   },
+  ruc: {
+    type: String,
+    required: true
+  },
+  rcc: {
+    type: String,
+    required: true
+  },
+  commission: {
+    type: Number,
+    default: 0
+  },
   referedcode: {
     type: String
   },

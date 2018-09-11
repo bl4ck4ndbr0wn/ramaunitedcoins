@@ -144,35 +144,35 @@ class EditUser extends Component {
 
     return (
       <PageContent>
-        <div class="row">
-          <div class="col-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">User</a>
                   </li>
-                  <li class="breadcrumb-item">
+                  <li className="breadcrumb-item">
                     <a href="#">Profile</a>
                   </li>
-                  <li class="breadcrumb-item active">User Details</li>
+                  <li className="breadcrumb-item active">User Details</li>
                 </ol>
               </div>
-              <h4 class="page-title">User Details</h4>
+              <h4 className="page-title">User Details</h4>
             </div>
           </div>
         </div>
         {/* <!-- end page title end breadcrumb --> */}
 
-        <div class="row justify-content-md-center">
-          <div class="col-6">
-            <div class="card m-b-30">
-              <div class="card-body">
-                <h4 class="mt-0 header-title">Edit Profile</h4>
+        <div className="row justify-content-md-center">
+          <div className="col-6">
+            <div className="card m-b-30">
+              <div className="card-body">
+                <h4 className="mt-0 header-title">Edit Profile</h4>
                 {loading ? (
                   <Spinner />
                 ) : (
-                  <form class="" onSubmit={this.onSubmitProfile}>
+                  <form className="" onSubmit={this.onSubmitProfile}>
                     <div className="form-group text-center row m-t-30">
                       <div className="col-6">
                         <TextFieldGroup
@@ -247,12 +247,12 @@ class EditUser extends Component {
               </div>
             </div>
           </div>
-          <div class="col-6">
-            <div class="card m-b-30">
-              <div class="card-body">
-                <h4 class="mt-0 header-title">Edit User</h4>
+          <div className="col-6">
+            <div className="card m-b-30">
+              <div className="card-body">
+                <h4 className="mt-0 header-title">Edit User</h4>
                 <div className="col-12">
-                  <form class="" onSubmit={this.onSubmitUser}>
+                  <form className="" onSubmit={this.onSubmitUser}>
                     <TextFieldGroup
                       name="name"
                       placeholder="name"

@@ -29,7 +29,7 @@ class Header extends Component {
       dContent = (
         <div id="preloader">
           <div id="status">
-            <div class="spinner" />
+            <div className="spinner" />
           </div>
         </div>
       );

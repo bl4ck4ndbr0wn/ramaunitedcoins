@@ -56,8 +56,12 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Request.find({ user: req.user.id })
+      .populate("user", ["name", "avatar", "email"])
       .sort({ date: -1 })
-      .then(token => res.json(token))
+
+      .then(token => {
+        res.json(token);
+      })
       .catch(err =>
         res.status(404).json({ notokensfound: "No Requests found" })
       );
@@ -107,7 +111,9 @@ router.post(
     const tokenFields = {
       user: req.user.id,
       modetransfer: req.body.modetransfer,
-      amount: req.body.amount
+      amount: req.body.amount,
+      price: req.body.price,
+      bonus: req.body.bonus
     };
     const newToken = new Request(tokenFields);
 

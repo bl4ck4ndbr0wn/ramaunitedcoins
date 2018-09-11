@@ -54,7 +54,7 @@ export default class RequestItem extends Component {
           <td>
             <Link
               to={`/admin/transaction/${token._id}`}
-              class="text-warning font-16"
+              className="text-warning font-16"
             >
               <i className="fa fa-edit" />
             </Link>
@@ -63,7 +63,7 @@ export default class RequestItem extends Component {
       );
     });
     return (
-      <table id="datatable" class="table table-bordered">
+      <table id="datatable" className="table table-bordered">
         <thead>
           <tr>
             <th>Transaction ID</th>

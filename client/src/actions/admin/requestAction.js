@@ -1,6 +1,13 @@
 import axios from "axios";
 
-import { GET_TOKENS, GET_TOKEN, TOKEN_LOADING, GET_ERRORS } from "../types";
+import {
+  GET_TOKENS,
+  GET_TOKEN,
+  TOKEN_LOADING,
+  GET_ERRORS,
+  CONFIRMED_FAILURE,
+  CONFIRMED_SUCCESS
+} from "../types";
 
 // TOKEN loading
 export const setTokenLoading = () => {
@@ -77,3 +84,26 @@ export const documentUpload = (imageUpload, id, history) => dispatch => {
       })
     );
 };
+
+// Confrim Request
+export const confrimRequest = id => dispatch => {
+  dispatch(setTokenLoading());
+  axios
+    .post(`/api/v1/admin/request/confirm/${id}`)
+    .then(res => {
+      dispatch(confirmedSuccess(res.data));
+    })
+    .catch(err => {
+      dispatch(confirmedFailure(err.response.data));
+    });
+};
+
+const confirmedSuccess = payload => ({
+  type: CONFIRMED_SUCCESS,
+  payload
+});
+
+const confirmedFailure = errors => ({
+  type: CONFIRMED_FAILURE,
+  errors
+});

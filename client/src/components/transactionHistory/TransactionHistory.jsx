@@ -24,10 +24,10 @@ class TransactionHistory extends Component {
     } else {
       if (Object.keys(tokens).length > 0) {
         TransactionContent = (
-          <div class="row">
-            <div class="col-12">
-              <div class="card m-b-30">
-                <div class="card-body">
+          <div className="row">
+            <div className="col-12">
+              <div className="card m-b-30">
+                <div className="card-body">
                   <div className="d-flex justify-content-between mb-4">
                     <div className="flexbox">
                       <Link to="/" className="btn btn-primary btn-fix">
@@ -51,10 +51,10 @@ class TransactionHistory extends Component {
         );
       } else {
         TransactionContent = (
-          <div class="row">
-            <div class="col-12">
-              <div class="card m-b-30">
-                <div class="card-body">
+          <div className="row">
+            <div className="col-12">
+              <div className="card m-b-30">
+                <div className="card-body">
                   <div className="d-flex justify-content-between mb-4">
                     <div className="flexbox">
                       <Link to="/" className="btn btn-primary btn-fix">
@@ -70,7 +70,7 @@ class TransactionHistory extends Component {
                     </Link>
                   </div>
                   <div className="d-flex justify-content-center mb-4">
-                    <span class="page-title text-center">
+                    <span className="page-title text-center">
                       You have no past Transactions
                     </span>
                   </div>
@@ -84,21 +84,21 @@ class TransactionHistory extends Component {
     return (
       <PageContent>
         {/* <!-- Page-Title --> */}
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">User</a>
                   </li>
-                  <li class="breadcrumb-item">
+                  <li className="breadcrumb-item">
                     <a href="#">transaction</a>
                   </li>
-                  <li class="breadcrumb-item active">My Transactions</li>
+                  <li className="breadcrumb-item active">My Transactions</li>
                 </ol>
               </div>
-              <h4 class="page-title">My Transactions</h4>
+              <h4 className="page-title">My Transactions</h4>
             </div>
           </div>
         </div>
