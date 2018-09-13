@@ -3,18 +3,24 @@ import {
   GET_TOKEN_DESC,
   GET_TOKENS,
   TOKEN_LOADING,
-  CLEAR_TOKENS
+  CLEAR_TOKENS,
+  CONFIRMED_SUCCESS,
+  CONFIRMED_FAILURE
 } from "../actions/types";
 
 const initialState = {
   token: null,
   tokens: null,
   token_desc: null,
-  loading: false
+  loading: false,
+  errors: null,
+  failure: false,
+  success: false
 };
 
 export default function(state = initialState, action) {
-  switch (action.type) {
+  const { payload, errors, type } = action;
+  switch (type) {
     case TOKEN_LOADING:
       return {
         ...state,
@@ -27,21 +33,40 @@ export default function(state = initialState, action) {
     case GET_TOKEN:
       return {
         ...state,
-        token: action.payload,
+        token: payload,
         loading: false
       };
     case GET_TOKEN_DESC:
       return {
         ...state,
-        token_desc: action.payload,
+        token_desc: payload,
         loading: false
       };
     case GET_TOKENS:
       return {
         ...state,
-        tokens: action.payload,
+        tokens: payload,
         token: {},
         loading: false
+      };
+
+    case CONFIRMED_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        token: payload,
+        success: true,
+        failure: false
+      };
+
+    case CONFIRMED_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        token: payload,
+        errors,
+        failure: true,
+        success: false
       };
     default:
       return state;

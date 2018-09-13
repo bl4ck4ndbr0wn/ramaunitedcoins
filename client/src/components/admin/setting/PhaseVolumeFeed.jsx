@@ -44,42 +44,31 @@ class PhaseVolumeFeed extends Component {
     }
 
     return (
-      <div className="col-md-6">
-        <div className="card m-b-30">
-          <div className="card-body">
-            <h4 className="mt-0 header-title">Phase and Selling Volumes</h4>
-            <p className="text-muted m-b-30 font-14">Current Investor Round</p>
-
-            <div className="d-flex justify-content-between mb-4">
-              <div className="flexbox">
-                <Link
-                  to="/admin/settings/rounds"
-                  className="btn btn-primary btn-fix"
-                >
-                  New Investor Round
-                </Link>
-              </div>
-            </div>
-            <table
-              id="datatable-buttons"
-              className="table table-striped table-bordered"
-              cellspacing="0"
-              width="100%"
-            >
-              <thead>
-                <tr>
-                  <th>Round</th>
-                  <th>Price</th>
-                  <th>Bonus</th>
-                  <th>Date</th>
-                  <th>Active</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>{rounds}</tbody>
-            </table>
-          </div>
-        </div>
+      <div>
+        <Link
+          to="/admin/settings/rounds"
+          className="btn btn-primary btn-fix mb-4"
+        >
+          New Investor Round
+        </Link>
+        <table
+          id="datatable-buttons"
+          className="table table-striped table-bordered"
+          cellspacing="0"
+          width="100%"
+        >
+          <thead>
+            <tr>
+              <th>Round</th>
+              <th>Price</th>
+              <th>Bonus</th>
+              <th>Date</th>
+              <th>Active</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>{rounds}</tbody>
+        </table>
       </div>
     );
   }

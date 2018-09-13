@@ -60,8 +60,12 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Request.find({ user: req.user.id })
+      .populate("user", ["name", "avatar", "email"])
       .sort({ date: -1 })
-      .then(token => res.json(token))
+
+      .then(token => {
+        res.json(token);
+      })
       .catch(err =>
         res.status(404).json({ notokensfound: "No Requests found" })
       );

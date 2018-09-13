@@ -1,55 +1,77 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import Moment from "react-moment";
 
 import PageContent from "../../../layout/PageContent";
 
 class Commission extends Component {
   render() {
+    let commission;
+    if (Object.keys(this.props.commission).length > 0) {
+      commission = this.props.commission.map(commission => (
+        <tr key={commission._id}>
+          <td>{commission.type}</td>
+          <td>{commission.percentage}%</td>
+          <td>
+            <Moment format="YYYY/MM/DD HH:mm">{commission.date}</Moment>
+          </td>
+          <td>{commission.isActive ? "Active" : "Deactivated"}</td>
+          <td>
+            <Link
+              to={`/admin/settings/edit-commission/${commission._id}`}
+              className="btn btn-light"
+            >
+              <i className="fa fa-edit" />
+            </Link>
+          </td>
+        </tr>
+      ));
+    } else {
+      commission = (
+        <tr>
+          <td colSpan="5">
+            <Link
+              to="/admin/settings/commission"
+              className="m-4 btn btn-primary justify-content-center"
+            >
+              New commission
+            </Link>
+          </td>
+        </tr>
+      );
+    }
     return (
-      <PageContent>
-        {/* <!-- Page-Title --> */}
-        <div className="row">
-          <div className="col-sm-12">
-            <div className="page-title-box">
-              <div className="btn-group pull-right">
-                <ol className="breadcrumb hide-phone p-0 m-0">
-                  <li className="breadcrumb-item">
-                    <a href="#">Admin</a>
-                  </li>
-                  <li className="breadcrumb-item">
-                    <a href="#">Settings</a>
-                  </li>
-                  <li className="breadcrumb-item active">Commission</li>
-                </ol>
-              </div>
-              <h4 className="page-title">Commission</h4>
-            </div>
-          </div>
-        </div>
-        {/* <!-- end page title end breadcrumb --> */}
-        <div className="row">
-          <div className="col-12">
-            <div className="card m-b-30">
-              <div className="card-body">
-                <div className="d-flex justify-content-center mb-4">
-                  <span className="page-title text-center">My commisions</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </PageContent>
+      <div>
+        <Link
+          to="/admin/settings/commission"
+          className="btn btn-primary btn-fix mb-4"
+        >
+          New Commission
+        </Link>
+        <table
+          id="datatable-buttons"
+          className="table table-striped table-bordered"
+          id="tech-companies-1"
+          className="table  table-striped"
+          cellspacing="0"
+          width="100%"
+        >
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Percentage</th>
+              <th>Date</th>
+              <th>Active</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>{commission}</tbody>
+        </table>
+      </div>
     );
   }
 }
 
-Commission.propTypes = {};
-
-const mapStateToProps = state => ({});
-
-export default connect(
-  mapStateToProps,
-  {}
-)(Commission);
+export default Commission;

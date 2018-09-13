@@ -1,15 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const axios = require("axios");
+const fetch = require("node-fetch");
 
 // Round model
 const Round = require("../../../models/Round");
 // Account model
 const Account = require("../../../models/Account");
+// Commission Model
+const CommissionSetting = require("../../../models/CommissionSetting");
 
 // Load Validation
 const validateRoundInput = require("../../../validation/round");
 const validateAccountInput = require("../../../validation/account");
+const validateCommissionInput = require("../../../validation/commission");
 
 // Check if user is Admins
 const authorize = require("../../../utils/authorize");
@@ -43,7 +48,20 @@ router.get(
               errors.noround = "There are no Rounds";
               return res.status(404).json(errors);
             }
-            res.json({ account, round });
+
+            CommissionSetting.find()
+              .then(commission => {
+                if (!commission) {
+                  errors.nocommission = "There are no commissions";
+                  return res.status(404).json(errors);
+                }
+                res.json({ account, round, commission });
+              })
+              .catch(err =>
+                res
+                  .status(404)
+                  .json({ nocommissionfound: "No Commissions found" })
+              );
           })
           .catch(err =>
             res.status(404).json({ noroundsfound: "No Round found" })
@@ -175,6 +193,89 @@ router.post(
               .then(round => res.json(round))
               .catch(err =>
                 res.statusCode(404).send({ msg: "Unable to Save Round." })
+              );
+          }
+        });
+      }
+    });
+  }
+);
+
+// @route   POST /api/v1/admin/setting/commission
+// @desc    Create Setting commission
+// @access  Private
+router.post(
+  "/commission",
+  passport.authenticate("jwt", { session: false }),
+  authorize("admin"),
+  (req, res) => {
+    const { errors, isValid } = validateCommissionInput(req.body);
+
+    // Check Validation
+    if (!isValid) {
+      // If any errors, send 400 with errors object
+      return res.status(400).json(errors);
+    }
+
+    // Get fields
+    const commissionFields = {};
+
+    commissionFields.user = req.user.id;
+    if (req.body.type) commissionFields.type = req.body.type;
+    if (req.body.percentage) commissionFields.percentage = req.body.percentage;
+    if (req.body.isActive) commissionFields.isActive = req.body.isActive;
+
+    // Add to commissions array
+
+    //check if there is another active CommissionSetting
+    CommissionSetting.findOne({ isActive: true }).then(commission => {
+      if (commission) {
+        commission.isActive = false;
+
+        commission.save().then(
+          CommissionSetting.findOne({ type: req.body.type }).then(
+            commission => {
+              if (commission) {
+                //update
+                CommissionSetting.findOneAndUpdate(
+                  { type: req.body.type },
+                  { $set: commissionFields },
+                  { new: true }
+                ).then(commission => {
+                  res.json(commission);
+                });
+              } else {
+                //Create commission
+                new CommissionSetting(commissionFields)
+                  .save()
+                  .then(commission => res.json(commission))
+                  .catch(err =>
+                    res
+                      .statusCode(404)
+                      .send({ msg: "Unable to Save commission." })
+                  );
+              }
+            }
+          )
+        );
+      } else {
+        CommissionSetting.findOne({ type: req.body.type }).then(commission => {
+          if (commission) {
+            //update
+            CommissionSetting.findOneAndUpdate(
+              { type: req.body.type },
+              { $set: commissionFields },
+              { new: true }
+            ).then(commission => {
+              res.json(commission);
+            });
+          } else {
+            //Create commission
+            new CommissionSetting(commissionFields)
+              .save()
+              .then(commission => res.json(commission))
+              .catch(err =>
+                res.statusCode(404).send({ msg: "Unable to Save commission." })
               );
           }
         });

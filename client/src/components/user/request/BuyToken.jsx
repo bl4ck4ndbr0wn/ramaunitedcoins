@@ -1,10 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import PropTypes from "prop-types";
 import { withRouter, Link } from "react-router-dom";
+import QRCode from "qrcode.react";
 
 import { createToken } from "../../../actions/tokenActions";
-import { getSettings } from "../../../actions/admin/settingAction";
+import {
+  getSettings,
+  fetchExchange
+} from "../../../actions/admin/settingAction";
 
 import PageContent from "../../layout/PageContent";
 import SelectListGroup from "../../common/SelectListGroup";
@@ -58,6 +63,7 @@ class BuyToken extends Component {
       this.setState({ data });
     });
   }
+
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -67,8 +73,11 @@ class BuyToken extends Component {
       this.setState({ errors: nextProps.errors });
     }
 
+    console.log(nextState);
+
     if (nextProps.setting.settings) {
       const setting = nextProps.setting.settings;
+
       const account = setting.account.find(
         account => account.isActive === true
       );
@@ -89,9 +98,14 @@ class BuyToken extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    const { modetransfer, amount } = this.state;
+    const { modetransfer, amount, price, bonus } = this.state;
 
-    const tokenData = { modetransfer, amount };
+    const tokenData = {
+      modetransfer,
+      amount,
+      price,
+      bonus
+    };
 
     this.props.createToken(tokenData, this.props.history);
   }
@@ -269,6 +283,30 @@ class BuyToken extends Component {
                         }
                       />
                     </div>
+                    <div className="col-6">
+                      <TextFieldGroup
+                        placeholder={`Price per coin in $.`}
+                        type="number"
+                        name="price"
+                        value={this.state.price}
+                        onChange={this.onChange}
+                        error={errors.price}
+                        disabled="disabled"
+                        info={`Investor price per coin in $.`}
+                      />
+                    </div>
+                    <div className="col-6">
+                      <TextFieldGroup
+                        placeholder={`Bonus percentage.`}
+                        type="number"
+                        name="bonus"
+                        value={this.state.bonus}
+                        onChange={this.onChange}
+                        error={errors.bonus}
+                        disabled="disabled"
+                        info={`Investor Bonus in %.`}
+                      />
+                    </div>
 
                     <div className="col-12">
                       <button
@@ -290,6 +328,7 @@ class BuyToken extends Component {
 }
 
 BuyToken.propTypes = {
+  fetchExchange: PropTypes.func.isRequired,
   getSettings: PropTypes.func.isRequired,
   createToken: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
@@ -302,7 +341,18 @@ const mapStateToProps = state => ({
   profile: state.profile,
   errors: state.errors
 });
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      createToken,
+      getSettings,
+      fetchExchange
+    },
+    dispatch
+  );
+
 export default connect(
   mapStateToProps,
-  { createToken, getSettings }
-)(withRouter(BuyToken));
+  mapDispatchToProps
+)(BuyToken);

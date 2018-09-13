@@ -7,7 +7,7 @@ import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { clearCurrentProfile } from "./actions/profileActions";
 
 import { Provider } from "react-redux";
-import store from "./store";
+import configStore from "./store";
 
 import PrivateRoute from "./components/common/PrivateRoute";
 import AdminPrivateRoute from "./components/common/AdminPrivateRoute";
@@ -38,14 +38,21 @@ import CreateProfile from "./components/create-profile/CreateProfile";
 import BuyToken from "./components/user/request/BuyToken";
 import EditProfile from "./components/edit-profile/EditProfile";
 import InfoDocument from "./components/user/request/InfoDocument";
+
+import AdminInfoDocument from "./components/admin/request/AdminInfoDocument";
 import TransactionHistory from "./components/transactionHistory/TransactionHistory";
 import MyReferrals from "./components/referrals/Index";
 import AdminRequestList from "./components/admin/request/RequestList";
 import HistoryLogs from "./components/admin/history/HistoryLogs";
 import Commission from "./components/admin/report/Commission";
+import EditTransaction from "./components/admin/request/edit-request/EditTransaction";
+import AddCommission from "./components/admin/setting/commision/AddCommission";
+import EditCommission from "./components/admin/setting/commision/EditCommission";
 
 class App extends Component {
   render() {
+    const store = configStore();
+
     // Check for token
     if (localStorage.jwtToken) {
       // Set auth token header auth
@@ -69,14 +76,14 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <div>
+          <React.Fragment>
             <Route exact path="/" component={Login} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/confirm" component={Confirm} />
             <Route exact path="/confirm/:id" component={Confirm} />
             <Route exact path="/resendconfirmation" component={ResendConfirm} />
-            <div>
+            <React.Fragment>
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>
@@ -147,8 +154,8 @@ class App extends Component {
                   component={MyReferrals}
                 />
               </Switch>
-            </div>
-            <div>
+            </React.Fragment>
+            <React.Fragment>
               <Switch>
                 <AdminPrivateRoute
                   exact
@@ -208,6 +215,7 @@ class App extends Component {
                   component={PhaseVolume}
                 />
               </Switch>
+
               <Switch>
                 <AdminPrivateRoute
                   exact
@@ -219,8 +227,31 @@ class App extends Component {
               <Switch>
                 <AdminPrivateRoute
                   exact
+                  path="/admin/settings/commission"
+                  component={AddCommission}
+                />
+              </Switch>
+              <Switch>
+                <AdminPrivateRoute
+                  exact
+                  path="/admin/settings/edit-commission/:id"
+                  component={EditCommission}
+                />
+              </Switch>
+
+              <Switch>
+                <AdminPrivateRoute
+                  exact
                   path="/admin/request/new"
                   component={RequestToken}
+                />
+              </Switch>
+
+              <Switch>
+                <AdminPrivateRoute
+                  exact
+                  path="/admin/request/document/:id"
+                  component={AdminInfoDocument}
                 />
               </Switch>
               <Switch>
@@ -228,6 +259,13 @@ class App extends Component {
                   exact
                   path="/admin/requests/all"
                   component={AdminRequestList}
+                />
+              </Switch>
+              <Switch>
+                <AdminPrivateRoute
+                  exact
+                  path="/admin/transaction/:id"
+                  component={EditTransaction}
                 />
               </Switch>
 
@@ -246,8 +284,8 @@ class App extends Component {
                   component={Commission}
                 />
               </Switch>
-            </div>
-          </div>
+            </React.Fragment>
+          </React.Fragment>
         </Router>
       </Provider>
     );

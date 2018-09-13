@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import { getCurrentProfile } from "../../../actions/profileActions";
+import { getSettings } from "../../../actions/admin/settingAction";
 
 import PageContent from "../../layout/PageContent";
 import Spinner from "../../common/Spinner";
@@ -12,11 +13,13 @@ import DHeader from "./DHeader";
 class UserDashboard extends Component {
   componentDidMount() {
     this.props.getCurrentProfile();
+    this.props.getSettings();
   }
 
   render() {
     const { user } = this.props.auth;
     const { profile, loading } = this.props.profile;
+    const { settings } = this.props.setting;
 
     let dashboardContent;
 
@@ -24,13 +27,16 @@ class UserDashboard extends Component {
       // this.props.history.push("/resendconfirmation");
       window.location.replace("/resendconfirmation");
     } else {
-      if (profile === null || loading) {
+      if (settings === null || profile === null || loading) {
         dashboardContent = <Spinner />;
       } else {
-        if (Object.keys(profile).length > 0) {
+        if (
+          Object.keys(profile).length > 0 &&
+          Object.keys(settings).length > 0
+        ) {
           dashboardContent = (
             <div>
-              <DHeader profile={profile} />
+              <DHeader profile={profile} settings={settings} />
             </div>
           );
         } else {
@@ -101,17 +107,19 @@ class UserDashboard extends Component {
 }
 
 UserDashboard.propTypes = {
+  getSettings: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+  setting: state.setting,
   profile: state.profile,
   auth: state.auth
 });
 
 export default connect(
   mapStateToProps,
-  { getCurrentProfile }
+  { getCurrentProfile, getSettings }
 )(UserDashboard);

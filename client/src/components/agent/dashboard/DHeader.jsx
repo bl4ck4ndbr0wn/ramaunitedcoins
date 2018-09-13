@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 
 const DHeader = ({ profile, settings }) => {
   let ruc = 0;
+  let notconfirmedTotal = 0;
+  let pending;
+
   const round = settings.round.find(round => round.isActive === true);
 
   if (round.bonus > 0) {

@@ -20,6 +20,8 @@ export default class TransactionItem extends Component {
 
   componentDidMount() {
     const dict = ["BTC", "LTC", "ETH", "BCH"];
+    var myMap = new Map();
+    let data = {};
 
     let currencies = dict.map(mode => {
       return fetch(
@@ -67,13 +69,16 @@ export default class TransactionItem extends Component {
               ...
             </a>
           </td>
+          <td>{token.user.name}</td>
           <td>
             <div className="media-img">
               <img src={image} alt="image" width="30" /> {token.modetransfer}
             </div>
           </td>
           <td>
-            {symbol} {token.amount}
+            {token.modetransfer === "Bank"
+              ? `${symbol} ${token.amount}`
+              : `${token.amount}  ${symbol}`}
             {token.modetransfer === "Bank" ? (
               ""
             ) : (
@@ -90,8 +95,8 @@ export default class TransactionItem extends Component {
           </td>
           <td>{token.rcc}</td>
           <td>{token.ruc}</td>
-          <td>{token.round_price}</td>
-          <td>{token.round_bonus}</td>
+          <td>${token.round_price}</td>
+          <td>{token.round_bonus}%</td>
           <td>
             <span
               className={`badge badge-${
@@ -111,8 +116,15 @@ export default class TransactionItem extends Component {
             <Moment format="DD.MM.YYYY HH:mm">{token.date}</Moment>
           </td>
           <td>
-            <Link to={`/transaction/${token._id}`} lass="text-muted font-16">
-              <i className="fa fa-edit" />
+            <Link
+              to={`/document/${token._id}`}
+              type="button"
+              className="btn btn-secondary"
+              data-toggle="tooltip"
+              data-placement="up"
+              title="Upload Document"
+            >
+              <i className="fa fa-upload" />
             </Link>
           </td>
         </tr>
@@ -124,6 +136,7 @@ export default class TransactionItem extends Component {
           <thead>
             <tr>
               <th>Transaction ID</th>
+              <th>Name</th>
               <th>Mode of Payment</th>
               <th>Total Price</th>
               <th>RCC</th>
