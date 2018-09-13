@@ -24,12 +24,12 @@ class MyReferrals extends Component {
     } else {
       if (Object.keys(referrals).length > 0) {
         referralContent = (
-          <div class="row">
-            <div class="col-12">
-              <div class="card m-b-30">
-                <div class="card-body">
-                  <h4 class="mt-0 header-title">My Refarrals</h4>
-                  <p class="text-muted m-b-30 font-14">
+          <div className="row">
+            <div className="col-12">
+              <div className="card m-b-30">
+                <div className="card-body">
+                  <h4 className="mt-0 header-title">My Refarrals</h4>
+                  <p className="text-muted m-b-30 font-14">
                     List of all users who used your referral code to register.
                   </p>
                   <ReferralItem referrals={referrals} />
@@ -40,12 +40,12 @@ class MyReferrals extends Component {
         );
       } else {
         referralContent = (
-          <div class="row">
-            <div class="col-12">
-              <div class="card m-b-30">
-                <div class="card-body">
+          <div className="row">
+            <div className="col-12">
+              <div className="card m-b-30">
+                <div className="card-body">
                   <div className="d-flex justify-content-center mb-4">
-                    <span class="page-title text-center">
+                    <span className="page-title text-center">
                       You have no past referrals!!
                     </span>
                   </div>
@@ -60,21 +60,21 @@ class MyReferrals extends Component {
     return (
       <PageContent>
         {/* <!-- Page-Title --> */}
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">User</a>
                   </li>
-                  <li class="breadcrumb-item">
+                  <li className="breadcrumb-item">
                     <a href="#">Reports</a>
                   </li>
-                  <li class="breadcrumb-item active">My Referrals</li>
+                  <li className="breadcrumb-item active">My Referrals</li>
                 </ol>
               </div>
-              <h4 class="page-title">My Referrals</h4>
+              <h4 className="page-title">My Referrals</h4>
             </div>
           </div>
         </div>

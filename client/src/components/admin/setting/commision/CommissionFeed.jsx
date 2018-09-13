@@ -10,31 +10,31 @@ class Commission extends Component {
     return (
       <PageContent>
         {/* <!-- Page-Title --> */}
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">Admin</a>
                   </li>
-                  <li class="breadcrumb-item">
+                  <li className="breadcrumb-item">
                     <a href="#">Settings</a>
                   </li>
-                  <li class="breadcrumb-item active">Commission</li>
+                  <li className="breadcrumb-item active">Commission</li>
                 </ol>
               </div>
-              <h4 class="page-title">Commission</h4>
+              <h4 className="page-title">Commission</h4>
             </div>
           </div>
         </div>
         {/* <!-- end page title end breadcrumb --> */}
-        <div class="row">
-          <div class="col-12">
-            <div class="card m-b-30">
-              <div class="card-body">
+        <div className="row">
+          <div className="col-12">
+            <div className="card m-b-30">
+              <div className="card-body">
                 <div className="d-flex justify-content-center mb-4">
-                  <span class="page-title text-center">My commisions</span>
+                  <span className="page-title text-center">My commisions</span>
                 </div>
               </div>
             </div>

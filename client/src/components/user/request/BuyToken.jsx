@@ -27,16 +27,36 @@ class BuyToken extends Component {
       address: "",
       price: "",
       bonus: "",
-      currentRate: "",
+      data: [],
       errors: {}
     };
 
-    this.onConvert = this.onConvert.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
   componentDidMount() {
     this.props.getSettings();
+
+    const dict = ["BTC", "LTC", "ETH", "BCH"];
+
+    let currencies = dict.map(mode => {
+      return fetch(
+        `https://min-api.cryptocompare.com/data/price?fsym=${mode}&tsyms=USD`
+      )
+        .then(response => response.json())
+        .then(responseData => {
+          return Object.keys(responseData).map(key => ({
+            mode,
+            key,
+            price: responseData[key]
+          }));
+        })
+        .catch(err => console.log(err));
+    });
+
+    Promise.all(currencies).then(data => {
+      this.setState({ data });
+    });
   }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
@@ -66,72 +86,6 @@ class BuyToken extends Component {
       });
     }
   }
-
-  onConvert(symbol) {
-    // let test = {
-    //   data: {
-    //     id: 1,
-    //     name: "Bitcoin",
-    //     symbol: "BTC",
-    //     website_slug: "bitcoin",
-    //     rank: 1,
-    //     circulating_supply: 17240562,
-    //     total_supply: 17240562,
-    //     max_supply: 21000000,
-    //     quotes: {
-    //       ETH: {
-    //         price: 24.4188205383,
-    //         volume_24h: 15404278.064291444,
-    //         market_cap: 420994189,
-    //         percent_change_1h: 0.27,
-    //         percent_change_24h: 0.79,
-    //         percent_change_7d: 3.95
-    //       },
-    //       USD: {
-    //         price: 6944.1432322,
-    //         volume_24h: 4380617528.1535,
-    //         market_cap: 119720931932,
-    //         percent_change_1h: 0.72,
-    //         percent_change_24h: -1.52,
-    //         percent_change_7d: 6.91
-    //       }
-    //     },
-    //     last_updated: 1535665164
-    //   },
-    //   metadata: {
-    //     timestamp: 1535664682,
-    //     error: null
-    //   }
-    // };
-    let price = 0;
-    let dict = {};
-
-    if (symbol !== "Bank" || (symbol !== "0" && !isEmpty(symbol))) {
-      fetch(`https://api.coinmarketcap.com/v2/ticker/1/?convert=${symbol}`)
-        .then(response => response.json())
-        .then(responseData => {
-          if (responseData.data !== {}) {
-            // console.log(responseData.data.quotes);
-            let dict = {};
-
-            Object.entries(responseData.data.quotes).map(item => {
-              dict[item[0]] = item[1].price;
-            });
-
-            let coinPrice = dict[symbol];
-            let usdPrice = dict.USD;
-
-            if (symbol === "BTC") {
-              usdPrice;
-            } else {
-              usdPrice / coinPrice;
-            }
-          }
-        })
-        .catch(err => console.log(err));
-    }
-  }
-
   onSubmit(e) {
     e.preventDefault();
 
@@ -143,14 +97,7 @@ class BuyToken extends Component {
   }
 
   render() {
-    const {
-      errors,
-      amount,
-      price,
-      bonus,
-      modetransfer,
-      currentRate
-    } = this.state;
+    const { errors, modetransfer, data } = this.state;
     const { settings, loading } = this.props.setting;
 
     let image;
@@ -159,7 +106,8 @@ class BuyToken extends Component {
     let result;
     let ruc = 0;
     let rcc = 0;
-    let ConvertedAmout;
+    let amount_in_dolars = 0;
+    let curent_mode = {};
 
     if (modetransfer === "Bank") (image = visa), (symbol = "$");
     else if (modetransfer === "LTC") (image = ltc), (symbol = "LTC");
@@ -187,30 +135,39 @@ class BuyToken extends Component {
           modetransfer === "0" ||
           modetransfer === ""
         ) {
-          result = "";
+          result = 0;
         } else {
           result = settings.account.find(accc => accc.type === modetransfer);
         }
 
         // Get current currency rate
-        let data = this.onConvert(this.state.modetransfer);
-        console.log(data);
+        curent_mode = (data.find(i =>
+          i.find(j => j.mode === this.state.modetransfer)
+        ) || [{}])[0];
+
+        if (!isEmpty(this.state.amount)) {
+          amount_in_dolars = this.state.amount * curent_mode.price;
+          rcc = amount_in_dolars * this.state.price;
+          ruc = rcc * (this.state.bonus / 100);
+        }
 
         tokenInfo =
           isEmpty(this.state.modetransfer) ||
+          modetransfer === "Bank" ||
           this.state.modetransfer === "0" ? (
             ""
           ) : (
-            <div class="col-md-4 col-xl-4">
-              <div class="mini-stat clearfix bg-info">
-                <span class="mini-stat-icon bg-light">
+            <div className="col-md-4 col-xl-4">
+              <div className="mini-stat clearfix bg-info">
+                <span className="mini-stat-icon bg-light">
                   <img src={image} alt="image" width="60" />
                 </span>
-                <div class="mini-stat-info text-right text-light">
-                  <span class="counter text-white">0 RCC</span>0 RUC
+                <div className="mini-stat-info text-right text-light">
+                  <span className="counter text-white">{rcc} RCC</span>
+                  {ruc} RUC
                 </div>
-                <div class="mb-0 m-t-20 form-group">
-                  <span class="text-white">
+                <div className="mb-0 m-t-20 form-group">
+                  <span className="text-white">
                     Bank in to this company {modetransfer} address.
                   </span>
                   <TextFieldGroup
@@ -220,17 +177,16 @@ class BuyToken extends Component {
                     value={result.address}
                     onChange={this.onChange}
                   />
-                  <button class="btn btn-sm btn-default" type="button">
-                    <i class="fa fa-copy" /> Copy Address
+                  <button className="btn btn-sm btn-default" type="button">
+                    <i className="fa fa-copy" /> Copy Address
                   </button>
                 </div>
-                <p class="mb-0 m-t-20 text-light">
-                  Total income: $22506{" "}
-                  <span class="pull-right">
-                    1h change <i class="fa fa-caret-up m-r-5" />
-                    10.25%
-                  </span>
+                <p className="mb-0 m-t-20 text-light">
+                  Total investment: {amount_in_dolars} USD
                 </p>
+                <span className="mb-0 m-t-20 text-light">
+                  1 {modetransfer} : {curent_mode.price} USD
+                </span>
               </div>
             </div>
           );
@@ -239,40 +195,40 @@ class BuyToken extends Component {
 
     return (
       <PageContent>
-        <div class="row">
-          <div class="col-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">User</a>
                   </li>
-                  <li class="breadcrumb-item">
+                  <li className="breadcrumb-item">
                     <a href="#">Request</a>
                   </li>
-                  <li class="breadcrumb-item active">Request RCC Tokens</li>
+                  <li className="breadcrumb-item active">Request RCC Tokens</li>
                 </ol>
               </div>
-              <h4 class="page-title">Request RCC Tokens</h4>
+              <h4 className="page-title">Request RCC Tokens</h4>
             </div>
           </div>
         </div>
         {/* <!-- end page title end breadcrumb --> */}
 
-        <div class="row justify-content-md-center">
+        <div className="row justify-content-md-center">
           {tokenInfo}
           <div
-            // class="col-8"
-            class={
+            // className="col-8"
+            className={
               isEmpty(modetransfer) || modetransfer === "0"
                 ? `col-md-8 col-xl-8`
                 : `col-md-6 col-xl-6`
             }
           >
-            <div class="card m-b-30">
-              <div class="card-body">
-                <h4 class="mt-0 header-title">Create Profile</h4>
-                <form class="" onSubmit={this.onSubmit}>
+            <div className="card m-b-30">
+              <div className="card-body">
+                <h4 className="mt-0 header-title">Create Profile</h4>
+                <form className="" onSubmit={this.onSubmit}>
                   <div className="form-group text-center row m-t-30">
                     <div className="col-12">
                       <SelectListGroup

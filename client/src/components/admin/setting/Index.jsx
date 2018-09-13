@@ -34,12 +34,12 @@ class Settings extends Component {
         );
       } else {
         settingContent = (
-          <div class="row">
+          <div className="row">
             <div className="col-md-6">
-              <div class="card m-b-30">
-                <div class="card-body">
-                  <h4 class="mt-0 header-title">Phase and Selling Volumes</h4>
-                  <p class="text-muted m-b-30 font-14">
+              <div className="card m-b-30">
+                <div className="card-body">
+                  <h4 className="mt-0 header-title">Phase and Selling Volumes</h4>
+                  <p className="text-muted m-b-30 font-14">
                     Current Investor Round
                   </p>
                   <div className="ibox-body">No Data Found.</div>
@@ -47,10 +47,10 @@ class Settings extends Component {
               </div>
             </div>
             <div className="col-md-6">
-              <div class="card m-b-30">
-                <div class="card-body">
-                  <h4 class="mt-0 header-title">Company Addresses</h4>
-                  <p class="text-muted m-b-30 font-14">
+              <div className="card m-b-30">
+                <div className="card-body">
+                  <h4 className="mt-0 header-title">Company Addresses</h4>
+                  <p className="text-muted m-b-30 font-14">
                     Company Default addresses
                   </p>
                   <div className="ibox-body">No Data Found.</div>
@@ -64,23 +64,23 @@ class Settings extends Component {
 
     return (
       <PageContent>
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">Admin</a>
                   </li>
-                  <li class="breadcrumb-item">
+                  <li className="breadcrumb-item">
                     <a href="#">Settings</a>
                   </li>
-                  <li class="breadcrumb-item active">
+                  <li className="breadcrumb-item active">
                     Company Account Addresses
                   </li>
                 </ol>
               </div>
-              <h4 class="page-title">Company Account Addresses</h4>
+              <h4 className="page-title">Company Account Addresses</h4>
             </div>
           </div>
         </div>

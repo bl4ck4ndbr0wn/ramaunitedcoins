@@ -6,18 +6,18 @@ class AgentDashboard extends Component {
     return (
       <PageContent>
         {/* <!-- Page-Title --> */}
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">Rama United Coins</a>
                   </li>
-                  <li class="breadcrumb-item active">Dashboard</li>
+                  <li className="breadcrumb-item active">Dashboard</li>
                 </ol>
               </div>
-              <h4 class="page-title">Dashboard</h4>
+              <h4 className="page-title">Dashboard</h4>
             </div>
           </div>
         </div>

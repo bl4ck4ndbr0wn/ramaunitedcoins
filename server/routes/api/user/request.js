@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const multer = require("multer");
+const fetch = require("node-fetch");
 
 // Request model
 const Request = require("../../../models/Request");
@@ -9,6 +10,9 @@ const Request = require("../../../models/Request");
 const Profile = require("../../../models/Profile");
 // Load User Model
 const User = require("../../../models/User");
+
+// Load Round Model
+const Round = require("../../../models/Round");
 
 // Validation
 const validateTokenRequestInput = require("../../../validation/request");
@@ -97,21 +101,49 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { errors, isValid } = validateTokenRequestInput(req.body);
-
     // Check Validation
     if (!isValid) {
       // Return any errors with 400 status
       return res.status(400).json(errors);
     }
-    // get fields
-    const tokenFields = {
-      user: req.user.id,
-      modetransfer: req.body.modetransfer,
-      amount: req.body.amount
-    };
-    const newToken = new Request(tokenFields);
 
-    newToken.save().then(token => res.json(token));
+    fetch(
+      `https://min-api.cryptocompare.com/data/price?fsym=${
+        req.body.modetransfer
+      }&tsyms=USD`
+    )
+      .then(response => response.json())
+      .then(responseData => {
+        let key = Object.keys(responseData)[0];
+
+        return {
+          price: responseData[key]
+        };
+      })
+      .catch(err => console.log(err))
+      .then(fin => {
+        Round.findOne({ isActive: true })
+          .then(round => {
+            let rcc = req.body.amount * fin.price * round.price;
+            let ruc = rcc * (round.bonus / 100);
+
+            // get fields
+            const tokenFields = {
+              user: req.user.id,
+              modetransfer: req.body.modetransfer,
+              amount: req.body.amount,
+              ruc,
+              rcc,
+              round_bonus: round.bonus,
+              round_price: round.price
+            };
+
+            const newToken = new Request(tokenFields);
+
+            newToken.save().then(token => res.json(token));
+          })
+          .catch();
+      });
   }
 );
 

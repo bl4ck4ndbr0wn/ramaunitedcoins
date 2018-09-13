@@ -35,19 +35,19 @@ class UserDashboard extends Component {
           );
         } else {
           dashboardContent = (
-            <div class="row justify-content-center">
-              <div class="col-lg-8">
-                <div class="card m-b-30">
-                  <div class="card-body">
-                    <h4 class="mt-0 header-title">Profile</h4>
+            <div className="row justify-content-center">
+              <div className="col-lg-8">
+                <div className="card m-b-30">
+                  <div className="card-body">
+                    <h4 className="mt-0 header-title">Profile</h4>
 
                     <div
-                      class="alert alert-info alert-dismissible fade show"
+                      className="alert alert-info alert-dismissible fade show"
                       role="alert"
                     >
                       <button
                         type="button"
-                        class="close"
+                        className="close"
                         data-dismiss="alert"
                         aria-label="Close"
                       >
@@ -56,9 +56,9 @@ class UserDashboard extends Component {
                       <strong>Heads up!</strong> You have not yet st up your
                       profile, please add some info.
                     </div>
-                    <p class="text-muted m-b-30 font-14">Welcome {user.name}</p>
+                    <p className="text-muted m-b-30 font-14">Welcome {user.name}</p>
 
-                    <div class="">
+                    <div className="">
                       <a
                         href="/create-profile"
                         className="btn btn-success btn-lg btn-block"
@@ -78,18 +78,18 @@ class UserDashboard extends Component {
     return (
       <PageContent>
         {/* <!-- Page-Title --> */}
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">Rama United Coins</a>
                   </li>
-                  <li class="breadcrumb-item active">Dashboard</li>
+                  <li className="breadcrumb-item active">Dashboard</li>
                 </ol>
               </div>
-              <h4 class="page-title">Dashboard</h4>
+              <h4 className="page-title">Dashboard</h4>
             </div>
           </div>
         </div>

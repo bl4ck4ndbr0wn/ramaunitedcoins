@@ -19,6 +19,26 @@ const RequestSchema = new Schema({
     type: Boolean,
     default: false
   },
+  ruc: {
+    type: Number,
+    default: 0,
+    required: true
+  },
+  rcc: {
+    type: Number,
+    default: 0,
+    required: true
+  },
+  round_bonus: {
+    type: Number,
+    default: 0,
+    required: true
+  },
+  round_price: {
+    type: Number,
+    default: 0,
+    required: true
+  },
   document: [
     {
       originalname: {

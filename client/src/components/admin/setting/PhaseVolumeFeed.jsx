@@ -45,10 +45,10 @@ class PhaseVolumeFeed extends Component {
 
     return (
       <div className="col-md-6">
-        <div class="card m-b-30">
-          <div class="card-body">
-            <h4 class="mt-0 header-title">Phase and Selling Volumes</h4>
-            <p class="text-muted m-b-30 font-14">Current Investor Round</p>
+        <div className="card m-b-30">
+          <div className="card-body">
+            <h4 className="mt-0 header-title">Phase and Selling Volumes</h4>
+            <p className="text-muted m-b-30 font-14">Current Investor Round</p>
 
             <div className="d-flex justify-content-between mb-4">
               <div className="flexbox">
@@ -62,7 +62,7 @@ class PhaseVolumeFeed extends Component {
             </div>
             <table
               id="datatable-buttons"
-              class="table table-striped table-bordered"
+              className="table table-striped table-bordered"
               cellspacing="0"
               width="100%"
             >

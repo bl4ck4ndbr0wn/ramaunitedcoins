@@ -67,7 +67,6 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   authorize("admin"),
-  upload.array("fileupload"),
   (req, res) => {
     const { errors, isValid } = validateAdminTokenRequestInput(req);
 
@@ -87,30 +86,7 @@ router.post(
 
     newToken
       .save()
-      .then(token => {
-        let fileModels = [];
-        console.log(JSON.parse(req.body.fileupload));
-
-        req.body.fileupload.map(file => {
-          const documentFields = {
-            originalname: file.originalname,
-            filename: file.filename,
-            path: file.path
-          };
-          // Add to document array
-          token.document.unshift(documentFields);
-
-          token
-            .save()
-            .catch(err =>
-              res
-                .status(404)
-                .json({ documentnotsaved: "Failed to save Document" })
-            );
-        });
-
-        res.json(token);
-      })
+      .then(token => res.json(token))
       .catch(err =>
         res
           .status(404)

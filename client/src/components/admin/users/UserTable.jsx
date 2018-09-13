@@ -37,12 +37,12 @@ badge-pill`}
       </tr>
     ));
     return (
-      <div class="card-body">
-        <h4 class="mt-0 header-title">Users</h4>
+      <div className="card-body">
+        <h4 className="mt-0 header-title">Users</h4>
 
         <table
           id="datatable-buttons"
-          class="table table-striped table-bordered"
+          className="table table-striped table-bordered"
           cellspacing="0"
           width="100%"
         >

@@ -244,11 +244,11 @@ class HorizontalHeader extends Component {
                 </li> */}
                 {/* <!-- notification--> */}
                 {Object.keys(profile).length > 0 ? (
-                  <li class="menu-item list-inline-item text-white">
+                  <li className="menu-item list-inline-item text-white">
                     Ballance : {profile.amount} $
                   </li>
                 ) : (
-                  <li class="menu-item list-inline-item text-white">
+                  <li className="menu-item list-inline-item text-white">
                     Ballance : 0 $
                   </li>
                 )}

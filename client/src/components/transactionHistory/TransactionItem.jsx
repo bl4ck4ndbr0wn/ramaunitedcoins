@@ -8,42 +8,50 @@ import btc from "../../assets/img/logos/payment/btc.png";
 import eth from "../../assets/img/logos/payment/Ethereum.png";
 import btch from "../../assets/img/logo/btch.png";
 import isEmpty from "../../validation/is-empty";
+import { Promise } from "mongoose";
 
 export default class TransactionItem extends Component {
   constructor() {
     super();
     this.state = {
-      data: {},
-      mode: "",
-      price: 0
+      data: []
     };
   }
 
   componentDidMount() {
     const dict = ["BTC", "LTC", "ETH", "BCH"];
 
-    Object.values(dict).map(mode => {
-      fetch(
+    let currencies = dict.map(mode => {
+      return fetch(
         `https://min-api.cryptocompare.com/data/price?fsym=${mode}&tsyms=USD`
       )
         .then(response => response.json())
         .then(responseData => {
-          let usd = responseData.USD;
-          this.setState({ mode, price: usd });
+          return Object.keys(responseData).map(key => ({
+            mode,
+            key,
+            price: responseData[key]
+          }));
         })
         .catch(err => console.log(err));
+    });
+
+    Promise.all(currencies).then(data => {
+      this.setState({ data });
     });
   }
 
   render() {
-    const { mode, price } = this.state;
+    const { data } = this.state;
 
-    const transaction = this.props.tokens.map(token => {
+    const transactions = this.props.tokens.map(token => {
       let image;
       let symbol;
-      let priceAvg = 0;
 
-      if (token.modetransfer === mode) priceAvg = price;
+      let curent_mode = (data.find(i =>
+        i.find(j => j.mode === token.modetransfer)
+      ) || [{}])[0];
+      console.log(curent_mode);
 
       if (token.modetransfer === "Bank") (image = visa), (symbol = "$");
       else if (token.modetransfer === "LTC") (image = ltc), (symbol = "LTC");
@@ -54,11 +62,14 @@ export default class TransactionItem extends Component {
       return (
         <tr key={token._id}>
           <td>
-            <a href="javascript:;">{token._id}</a>
+            <a href="javascript:;">
+              {token._id.substring(0, 6)}
+              ...
+            </a>
           </td>
           <td>
             <div className="media-img">
-              <img src={image} alt="image" width="60" /> {token.modetransfer}
+              <img src={image} alt="image" width="30" /> {token.modetransfer}
             </div>
           </td>
           <td>
@@ -67,12 +78,20 @@ export default class TransactionItem extends Component {
               ""
             ) : (
               <div className="media-body">
-                <div className="media-heading">
-                  1 {token.modetransfer} : {priceAvg} USD
+                <div
+                  className="media-heading"
+                  style={{ fontSize: "0.7rem", color: "#0f9cf3" }}
+                >
+                  1 {token.modetransfer} : {curent_mode ? curent_mode.price : 0}{" "}
+                  USD
                 </div>
               </div>
             )}
           </td>
+          <td>{token.rcc}</td>
+          <td>{token.ruc}</td>
+          <td>{token.round_price}</td>
+          <td>{token.round_bonus}</td>
           <td>
             <span
               className={`badge badge-${
@@ -89,7 +108,7 @@ export default class TransactionItem extends Component {
             {token.document.length}
           </td>
           <td>
-            <Moment format="DD.MM.YYYY">{token.date}</Moment>
+            <Moment format="DD.MM.YYYY HH:mm">{token.date}</Moment>
           </td>
           <td>
             <Link to={`/transaction/${token._id}`} lass="text-muted font-16">
@@ -101,19 +120,23 @@ export default class TransactionItem extends Component {
     });
     return (
       <div className="table-responsive row">
-        <table id="datatable" class="table table-bordered">
+        <table id="datatable" className="table table-bordered">
           <thead>
             <tr>
               <th>Transaction ID</th>
               <th>Mode of Payment</th>
               <th>Total Price</th>
+              <th>RCC</th>
+              <th>RUC</th>
+              <th>Round Price</th>
+              <th>Round Bonus</th>
               <th>Status</th>
               <th>Document</th>
               <th>Date</th>
               <th className="no-sort" />
             </tr>
           </thead>
-          <tbody>{transaction}</tbody>
+          <tbody>{transactions}</tbody>
         </table>
       </div>
     );

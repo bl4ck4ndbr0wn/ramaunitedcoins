@@ -107,32 +107,32 @@ class RequestToken extends Component {
 
     return (
       <PageContent>
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="page-title-box">
-              <div class="btn-group pull-right">
-                <ol class="breadcrumb hide-phone p-0 m-0">
-                  <li class="breadcrumb-item">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="page-title-box">
+              <div className="btn-group pull-right">
+                <ol className="breadcrumb hide-phone p-0 m-0">
+                  <li className="breadcrumb-item">
                     <a href="#">Admin</a>
                   </li>
-                  <li class="breadcrumb-item">
+                  <li className="breadcrumb-item">
                     <a href="#">Request</a>
                   </li>
-                  <li class="breadcrumb-item active">Request Token</li>
+                  <li className="breadcrumb-item active">Request Token</li>
                 </ol>
               </div>
-              <h4 class="page-title">Request Token</h4>
+              <h4 className="page-title">Request Token</h4>
             </div>
           </div>
         </div>
         {/* <!-- end page title end breadcrumb --> */}
 
-        <div class="row justify-content-md-center">
-          <div class="col-8">
-            <div class="card m-b-30">
-              <div class="card-body">
-                <h4 class="mt-0 header-title">New Token Request</h4>
-                <form class="" onSubmit={this.onSubmit}>
+        <div className="row justify-content-md-center">
+          <div className="col-8">
+            <div className="card m-b-30">
+              <div className="card-body">
+                <h4 className="mt-0 header-title">New Token Request</h4>
+                <form className="" onSubmit={this.onSubmit}>
                   <div className="form-group text-center row m-t-20">
                     <div className="col-12">
                       <SelectListGroup
@@ -193,9 +193,9 @@ class RequestToken extends Component {
                       />
                     </div>
                     <div className="col-12 ">
-                      <div class="m-b-30">
-                        <form action="#" class="dropzone">
-                          <div class="fallback">
+                      <div className="m-b-30">
+                        <form action="#" className="dropzone">
+                          <div className="fallback">
                             <input
                               name="file"
                               type="file"
@@ -207,7 +207,7 @@ class RequestToken extends Component {
                       </div>
                     </div>
                     <div className="col-12">
-                      <div class="m-b-30">
+                      <div className="m-b-30">
                         <div className="custom-control custom-checkbox">
                           <input
                             type="checkbox"
