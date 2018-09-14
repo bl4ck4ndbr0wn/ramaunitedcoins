@@ -15,14 +15,6 @@ const RequestSchema = new Schema({
     type: Number,
     default: 0
   },
-  ruc: {
-    type: Number,
-    default: 0
-  },
-  rcc: {
-    type: Number,
-    default: 0
-  },
   confirmed: {
     type: Boolean,
     default: false
@@ -70,9 +62,8 @@ const RequestSchema = new Schema({
   ApprovedBy: {
     type: String
   },
-  Approveddate: {
-    type: Date,
-    default: Date.now
+  ApprovedDate: {
+    type: Date
   },
   date: {
     type: Date,

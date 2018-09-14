@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 const keys = require("../../../config/keys");
 const passport = require("passport");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
 const Hogan = require("hogan.js");
 const fs = require("fs");
 
@@ -21,9 +20,8 @@ const User = require("../../../models/User");
 // Load Token model
 const Token = require("../../../models/Token");
 
-// Sendgrid Config
-const userSg = require("../../../config/keys").user;
-const passSg = require("../../../config/keys").pass;
+//Send Email
+const SendEmail = require("../../../utils/sendMail");
 
 // get email template
 const confirmTemplate = fs.readFileSync(
@@ -87,13 +85,6 @@ router.post("/register", (req, res) => {
                 .save()
                 .then(() => {
                   // Send the email
-                  const transporter = nodemailer.createTransport({
-                    service: "Sendgrid",
-                    auth: {
-                      user: userSg,
-                      pass: passSg
-                    }
-                  });
                   const url = `http://${req.headers.host}/confirm/${
                     token.token
                   }`;
@@ -107,18 +98,8 @@ router.post("/register", (req, res) => {
                       url
                     })
                   };
-                  transporter.sendMail(mailOptions, err => {
-                    if (err) {
-                      return res.status(500).send({ msg: err.message });
-                    }
-                    res
-                      .status(200)
-                      .send(
-                        "A verification email has been sent to " +
-                          user.email +
-                          "."
-                      );
-                  });
+
+                  SendEmail(mailOptions, res);
                 })
                 .catch(err => {
                   return res.status(500).send({ msg: err.message });
@@ -290,13 +271,6 @@ router.post("/resend", (req, res) => {
       .save()
       .then(() => {
         // Send the email
-        const transporter = nodemailer.createTransport({
-          service: "Sendgrid",
-          auth: {
-            user: userSg,
-            pass: passSg
-          }
-        });
         const url = `http://${req.headers.host}/confirm/${token.token}`;
         const mailOptions = {
           from: "no-reply@ramaunitedcoin.io",
@@ -308,14 +282,8 @@ router.post("/resend", (req, res) => {
             url
           })
         };
-        transporter.sendMail(mailOptions, err => {
-          if (err) {
-            return res.status(500).send({ msg: err.message });
-          }
-          res
-            .status(200)
-            .send("A verification email has been sent to " + user.email + ".");
-        });
+
+        SendEmail(mailOptions, res);
       })
       .catch(err => {
         return res.status(500).send({ msg: err.message });

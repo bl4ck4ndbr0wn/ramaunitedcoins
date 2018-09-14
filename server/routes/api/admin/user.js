@@ -3,7 +3,6 @@ const router = express.Router();
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
-const nodemailer = require("nodemailer");
 
 // Load User model
 const User = require("../../../models/User");
@@ -15,9 +14,8 @@ const authorize = require("../../../utils/authorize");
 const validateRegisterInput = require("../../../validation/register");
 const validateUdateUserInput = require("../../../validation/adminRegister");
 
-// Sendgrid Config
-const userSg = require("../../../config/keys").user;
-const passSg = require("../../../config/keys").pass;
+//Send Email
+const SendEmail = require("../../../utils/sendMail");
 
 // @route   GET api/v1/admin/user/test
 // @desc    Tests tokem route
@@ -116,14 +114,6 @@ router.post(
               .save()
               .then(user => {
                 // Send the email
-                const transporter = nodemailer.createTransport({
-                  service: "Sendgrid",
-                  auth: {
-                    user: userSg,
-                    pass: passSg
-                  }
-                });
-
                 const mailOptions = {
                   from: "noreply@ramaunitedcoin.io",
                   to: user.email,
@@ -136,14 +126,8 @@ router.post(
                 password: ${req.body.password} \n\n
                 Kindly login to view recent transaction. .\n`
                 };
-                //senf email
-                transporter.sendMail(mailOptions, err => {
-                  if (err) {
-                    return res.status(500).send({ msg: err.message });
-                  }
-
-                  res.json(user);
-                });
+                //send email
+                SendEmail(mailOptions, res, user);
               })
               .catch(err => res.status(500).send({ msg: err }));
           });

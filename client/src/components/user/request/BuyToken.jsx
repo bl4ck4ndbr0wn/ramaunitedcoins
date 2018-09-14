@@ -165,9 +165,11 @@ class BuyToken extends Component {
           ruc = rcc * (this.state.bonus / 100);
         }
 
+        let bank_rcc = this.state.amount * this.state.price;
+        let bank_ruc = bank_rcc * (this.state.bonus / 100);
+
         tokenInfo =
           isEmpty(this.state.modetransfer) ||
-          modetransfer === "Bank" ||
           this.state.modetransfer === "0" ? (
             ""
           ) : (
@@ -176,31 +178,55 @@ class BuyToken extends Component {
                 <span className="mini-stat-icon bg-light">
                   <img src={image} alt="image" width="60" />
                 </span>
-                <div className="mini-stat-info text-right text-light">
-                  <span className="counter text-white">{rcc} RCC</span>
-                  {ruc} RUC
-                </div>
-                <div className="mb-0 m-t-20 form-group">
-                  <span className="text-white">
-                    Bank in to this company {modetransfer} address.
-                  </span>
-                  <TextFieldGroup
-                    placeholder={`Company ${modetransfer} Address.`}
-                    type="number"
-                    name="address"
-                    value={result.address}
-                    onChange={this.onChange}
-                  />
-                  <button className="btn btn-sm btn-default" type="button">
-                    <i className="fa fa-copy" /> Copy Address
-                  </button>
-                </div>
+                {modetransfer === "Bank" ? (
+                  <div className="mini-stat-info text-right text-light">
+                    <span className="counter text-white">{bank_rcc} RCC</span>
+                    {bank_ruc} RUC
+                  </div>
+                ) : (
+                  <div className="mini-stat-info text-right text-light">
+                    <span className="counter text-white">{rcc} RCC</span>
+                    {ruc} RUC
+                  </div>
+                )}
+                {modetransfer === "Bank" ? (
+                  ""
+                ) : (
+                  <div className="mb-0 m-t-20 form-group">
+                    <span className="text-white">
+                      Bank in to this company {modetransfer} address.
+                    </span>
+                    <TextFieldGroup
+                      placeholder={`Company ${modetransfer} Address.`}
+                      type="number"
+                      name="address"
+                      value={result.address}
+                      onChange={this.onChange}
+                    />
+                    <QRCode
+                      value={result.address}
+                      style={{
+                        height: "100px",
+                        width: "100px"
+                      }}
+                    />
+                  </div>
+                )}
+
                 <p className="mb-0 m-t-20 text-light">
-                  Total investment: {amount_in_dolars} USD
+                  Total investment:{" "}
+                  {modetransfer === "Bank"
+                    ? this.state.amount
+                    : amount_in_dolars}{" "}
+                  USD
                 </p>
-                <span className="mb-0 m-t-20 text-light">
-                  1 {modetransfer} : {curent_mode.price} USD
-                </span>
+                {modetransfer === "Bank" ? (
+                  ""
+                ) : (
+                  <span className="mb-0 m-t-20 text-light">
+                    1 {modetransfer} : {curent_mode.price} USD
+                  </span>
+                )}
               </div>
             </div>
           );

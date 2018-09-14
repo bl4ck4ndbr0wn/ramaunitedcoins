@@ -26,6 +26,7 @@ class RequestToken extends Component {
       confirmed: false,
       price: "",
       bonus: "",
+      data: [],
       errors: {}
     };
 
@@ -36,6 +37,27 @@ class RequestToken extends Component {
   componentDidMount() {
     this.props.getAllUsers();
     this.props.getSettings();
+
+    const dict = ["BTC", "LTC", "ETH", "BCH"];
+
+    let currencies = dict.map(mode => {
+      return fetch(
+        `https://min-api.cryptocompare.com/data/price?fsym=${mode}&tsyms=USD`
+      )
+        .then(response => response.json())
+        .then(responseData => {
+          return Object.keys(responseData).map(key => ({
+            mode,
+            key,
+            price: responseData[key]
+          }));
+        })
+        .catch(err => console.log(err));
+    });
+
+    Promise.all(currencies).then(data => {
+      this.setState({ data });
+    });
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
@@ -47,7 +69,6 @@ class RequestToken extends Component {
       const account = setting.account.find(
         account => account.isActive === true
       );
-      const round = setting.round.find(round => round.isActive === true);
       // If account field doesnt exist, make empty string
       account.address = !isEmpty(account.address) ? account.address : "";
 
@@ -80,7 +101,7 @@ class RequestToken extends Component {
     this.props.requestTokens(tokenData, this.props.history);
   }
   render() {
-    const { errors, modetransfer, price, bonus } = this.state;
+    const { errors, modetransfer, price, bonus, data } = this.state;
     const { users, loading } = this.props.userAdmin;
     const { settings } = this.props.setting;
 
@@ -116,6 +137,13 @@ class RequestToken extends Component {
 
     let tokenInfo;
     let result;
+    let ruc = 0;
+    let rcc = 0;
+    let amount_in_dolars = 0;
+    let curent_mode = {};
+    let bank_rcc = 0;
+    let bank_ruc = 0;
+    let converted_coins;
 
     if ((settings === null) | loading) {
       tokenInfo = <Spinner />;
@@ -130,6 +158,73 @@ class RequestToken extends Component {
           result = "";
         } else {
           result = settings.account.find(accc => accc.type === modetransfer);
+        }
+
+        // Get current currency rate
+        curent_mode = (data.find(i =>
+          i.find(j => j.mode === this.state.modetransfer)
+        ) || [{}])[0];
+
+        if (!isEmpty(this.state.amount)) {
+          amount_in_dolars = this.state.amount * curent_mode.price;
+          rcc = amount_in_dolars * this.state.price;
+          ruc = rcc * (this.state.bonus / 100);
+        }
+
+        bank_rcc = this.state.amount * this.state.price;
+        bank_ruc = bank_rcc * (this.state.bonus / 100);
+
+        if (isEmpty(this.state.amount)) {
+          converted_coins = "";
+        } else {
+          if (isEmpty(price) || isEmpty(bonus) || isEmpty(modetransfer)) {
+            converted_coins = (
+              <div className="col-12">
+                <div className="alert alert-warning alert-dismissible">
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="alert"
+                    aria-hidden="true"
+                  >
+                    ×
+                  </button>
+                  <strong>Warning</strong>
+                  <br />
+                  Mode of transfer or Round price or Bonus can not be blank.
+                </div>
+              </div>
+            );
+          } else {
+            converted_coins = (
+              <div class="col-6">
+                <div class="card m-b-30 text-white card-success">
+                  <div class="card-body">
+                    <blockquote class="card-bodyquote">
+                      <p>{modetransfer === "Bank" ? bank_rcc : rcc} RCC</p>
+                      <p>{modetransfer === "Bank" ? bank_ruc : ruc} RUC</p>
+                      <p>
+                        Total investment:{" "}
+                        {modetransfer === "Bank"
+                          ? this.state.amount
+                          : amount_in_dolars}{" "}
+                        USD
+                      </p>
+                      <footer>
+                        {modetransfer === "Bank" ? (
+                          ""
+                        ) : (
+                          <cite title="Source Title">
+                            1 {modetransfer} : {curent_mode.price} USD
+                          </cite>
+                        )}
+                      </footer>
+                    </blockquote>
+                  </div>
+                </div>
+              </div>
+            );
+          }
         }
 
         tokenInfo =
@@ -261,6 +356,7 @@ class RequestToken extends Component {
                         }
                       />
                     </div>
+                    {converted_coins}
                     <div className="col-12">
                       <div className="m-b-30">
                         <div className="custom-control custom-checkbox">
