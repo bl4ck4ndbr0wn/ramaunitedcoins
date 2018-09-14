@@ -25,7 +25,6 @@
     "node": "8.11.4"
   },
   "scripts": {
-    "install": "npm insall",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
