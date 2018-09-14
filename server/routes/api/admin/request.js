@@ -129,35 +129,61 @@ router.post(
       const newToken = new Request(tokenFields);
 
       newToken.save().then(token => {
-        // sendUserDetails(token, res);
-        User.findById(token.user).then(user => {
-          const mailOptions = {
-            from: "noreply@ramaunitedcoin.io",
-            to: user.email,
-            subject: "Rama United Coin! #New Request",
-            html: compileNewRequestTemplate.render({
-              title: "Rama United Coin",
-              mode: token.modetransfer,
-              amount: `$ ${token.amount}`,
-              email: user.email,
-              ruc: token.ruc.toFixed(4),
-              rcc: token.rcc.toFixed(4),
-              transactionId: token._id,
-              round_price: token.round_price,
-              round_bonus: token.round_bonus,
-              Confirmed: token.confirmed ? "Accepted" : "Pending"
-            })
-          };
+        if (token.confirmed) {
+          CommissionSetting.findOne({ isActive: true }).then(commission => {
+            if (commission.type === "RUC") {
+              let ruc = (token.ruc * commission.percentage) / 100;
 
-          SendEmail(mailOptions, res, token);
-        });
+              let commissionFields = {
+                user: token.user,
+                percentage: commission.percentage,
+                ruc
+              };
 
-        // const mailOptions = {
-        //   title: "", // ruc
-        //   head: "", // dear sir
-        //   info: "", //description
-        //   url: "" // request details
-        // };
+              saveCommission(commissionFields, token, res);
+            } else if (commission.type === "RCC") {
+              let rcc = (token.rcc * commission.percentage) / 100;
+
+              let commissionFields = {
+                user: token.user,
+                percentage: commission.percentage,
+                rcc
+              };
+
+              saveCommission(commissionFields, token, res);
+            }
+          });
+        } else {
+          // sendUserDetails(token, res);
+          User.findById(token.user).then(user => {
+            const mailOptions = {
+              from: "noreply@ramaunitedcoin.io",
+              to: user.email,
+              subject: "Rama United Coin! #New Request",
+              html: compileNewRequestTemplate.render({
+                title: "Rama United Coin",
+                mode: token.modetransfer,
+                amount: `$ ${token.amount}`,
+                email: user.email,
+                ruc: token.ruc.toFixed(4),
+                rcc: token.rcc.toFixed(4),
+                transactionId: token._id,
+                round_price: token.round_price,
+                round_bonus: token.round_bonus,
+                Confirmed: token.confirmed ? "Accepted" : "Pending"
+              })
+            };
+
+            SendEmail(mailOptions, res, token);
+          });
+
+          // const mailOptions = {
+          //   title: "", // ruc
+          //   head: "", // dear sir
+          //   info: "", //description
+          //   url: "" // request details
+          // };
+        }
       });
     } else {
       fetch(
@@ -199,27 +225,54 @@ router.post(
           const newToken = new Request(tokenFields);
 
           newToken.save().then(token => {
-            User.findById(token.user).then(user => {
-              const mailOptions = {
-                from: "noreply@ramaunitedcoin.io",
-                to: user.email,
-                subject: "Rama United Coin! #New Request",
-                html: compileNewRequestTemplate.render({
-                  title: "Rama United Coin",
-                  mode: token.modetransfer,
-                  amount: `${token.amount} ${token.modetransfer}`,
-                  email: user.email,
-                  ruc: token.ruc.toFixed(4),
-                  rcc: token.rcc.toFixed(4),
-                  transactionId: token._id,
-                  round_price: token.round_price,
-                  round_bonus: token.round_bonus,
-                  Confirmed: token.confirmed ? "Accepted" : "Pending"
-                })
-              };
+            if (token.confirmed) {
+              CommissionSetting.findOne({ isActive: true }).then(commission => {
+                if (commission.type === "RUC") {
+                  let ruc = (token.ruc * commission.percentage) / 100;
 
-              SendEmail(mailOptions, res, token);
-            });
+                  let commissionFields = {
+                    user: token.user,
+                    percentage: commission.percentage,
+                    ruc
+                  };
+
+                  saveCommission(commissionFields, token, res);
+                } else if (commission.type === "RCC") {
+                  let rcc = (token.rcc * commission.percentage) / 100;
+
+                  let commissionFields = {
+                    user: token.user,
+                    percentage: commission.percentage,
+                    rcc
+                  };
+
+                  saveCommission(commissionFields, token, res);
+                }
+              });
+            } else {
+              // sendUserDetails(token, res);
+              User.findById(token.user).then(user => {
+                const mailOptions = {
+                  from: "noreply@ramaunitedcoin.io",
+                  to: user.email,
+                  subject: "Rama United Coin! #New Request",
+                  html: compileNewRequestTemplate.render({
+                    title: "Rama United Coin",
+                    mode: token.modetransfer,
+                    amount: `$ ${token.amount}`,
+                    email: user.email,
+                    ruc: token.ruc.toFixed(4),
+                    rcc: token.rcc.toFixed(4),
+                    transactionId: token._id,
+                    round_price: token.round_price,
+                    round_bonus: token.round_bonus,
+                    Confirmed: token.confirmed ? "Accepted" : "Pending"
+                  })
+                };
+
+                SendEmail(mailOptions, res, token);
+              });
+            }
           });
         });
     }
@@ -247,30 +300,32 @@ router.post(
               } else {
                 token.confirmed = true;
 
-                CommissionSetting.findOne({ isActive: true }).then(
-                  commission => {
-                    if (commission.type === "RUC") {
-                      let ruc = (token.ruc * commission.percentage) / 100;
+                token.save().then(tokens =>
+                  CommissionSetting.findOne({ isActive: true }).then(
+                    commission => {
+                      if (commission.type === "RUC") {
+                        let ruc = (token.ruc * commission.percentage) / 100;
 
-                      let commissionFields = {
-                        user: token.user,
-                        percentage: commission.percentage,
-                        ruc
-                      };
+                        let commissionFields = {
+                          user: token.user,
+                          percentage: commission.percentage,
+                          ruc
+                        };
 
-                      saveCommission(commissionFields, token);
-                    } else if (commission.type === "RCC") {
-                      let rcc = (token.rcc * commission.percentage) / 100;
+                        saveCommission(commissionFields, token);
+                      } else if (commission.type === "RCC") {
+                        let rcc = (token.rcc * commission.percentage) / 100;
 
-                      let commissionFields = {
-                        user: token.user,
-                        percentage: commission.percentage,
-                        rcc
-                      };
+                        let commissionFields = {
+                          user: token.user,
+                          percentage: commission.percentage,
+                          rcc
+                        };
 
-                      saveCommission(commissionFields, token, res);
+                        saveCommission(commissionFields, token, res);
+                      }
                     }
-                  }
+                  )
                 );
               }
             })
@@ -288,13 +343,33 @@ const saveCommission = (commissionFields, token, res) => {
   newCommission
     .save()
     .then(commission => {
-      token.save().then(tokens => res.json(tokens));
+      token.save().then(tokens =>
+        User.findById(token.user).then(user => {
+          const mailOptions = {
+            from: "noreply@ramaunitedcoin.io",
+            to: user.email,
+            subject: "Rama United Coin! #New Request",
+            html: compileNewRequestTemplate.render({
+              title: "Rama United Coin",
+              mode: token.modetransfer,
+              amount: `${token.amount} ${token.modetransfer}`,
+              email: user.email,
+              ruc: token.ruc.toFixed(4),
+              rcc: token.rcc.toFixed(4),
+              transactionId: token._id,
+              round_price: token.round_price,
+              round_bonus: token.round_bonus,
+              Confirmed: token.confirmed ? "Accepted" : "Pending"
+            })
+          };
+
+          SendEmail(mailOptions, res, token);
+        })
+      );
     })
     .catch(err =>
       res.status(404).json({ commissionnotsaved: "Commission not saved." })
     );
 };
-
-const sendUserDetails = () => {};
 
 module.exports = router;
