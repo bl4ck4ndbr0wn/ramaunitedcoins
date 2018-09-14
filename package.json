@@ -1,6 +1,6 @@
 {
   "name": "rama",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "rama portal",
   "main": "server.js",
   "scripts": {
@@ -13,6 +13,9 @@
   },
   "author": "Alpha Nganga Ndirangu",
   "license": "ISC",
+  "engines": {
+    "node": "8.11.4"
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
