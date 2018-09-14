@@ -135,6 +135,7 @@ router.post(
               let ruc = (token.ruc * commission.percentage) / 100;
 
               let commissionFields = {
+                requestId: token._id,
                 user: token.user,
                 percentage: commission.percentage,
                 ruc
@@ -145,6 +146,7 @@ router.post(
               let rcc = (token.rcc * commission.percentage) / 100;
 
               let commissionFields = {
+                requestId: token._id,
                 user: token.user,
                 percentage: commission.percentage,
                 rcc
@@ -176,13 +178,6 @@ router.post(
 
             SendEmail(mailOptions, res, token);
           });
-
-          // const mailOptions = {
-          //   title: "", // ruc
-          //   head: "", // dear sir
-          //   info: "", //description
-          //   url: "" // request details
-          // };
         }
       });
     } else {
@@ -231,6 +226,7 @@ router.post(
                   let ruc = (token.ruc * commission.percentage) / 100;
 
                   let commissionFields = {
+                    requestId: token._id,
                     user: token.user,
                     percentage: commission.percentage,
                     ruc
@@ -241,6 +237,7 @@ router.post(
                   let rcc = (token.rcc * commission.percentage) / 100;
 
                   let commissionFields = {
+                    requestId: token._id,
                     user: token.user,
                     percentage: commission.percentage,
                     rcc
@@ -296,7 +293,13 @@ router.post(
               if (token.confirmed) {
                 token.confirmed = false;
 
-                token.save().then(tokens => res.json(tokens));
+                token.save().then(tokens => {
+                  Commission.findOneAndRemove({
+                    requestId: token._id
+                  })
+                    .then(() => res.json(tokens))
+                    .catch(err => res.statusCode(404).json(err));
+                });
               } else {
                 token.confirmed = true;
 
@@ -307,21 +310,61 @@ router.post(
                         let ruc = (token.ruc * commission.percentage) / 100;
 
                         let commissionFields = {
+                          requestId: token._id,
                           user: token.user,
                           percentage: commission.percentage,
                           ruc
                         };
 
+                        User.findById(token.user).then(user => {
+                          const mailOptions = {
+                            from: "noreply@ramaunitedcoin.io",
+                            to: user.email,
+                            subject: "Rama United Coin! #New Request",
+                            html: compileRequestStatusTempalte.render({
+                              title: "Rama United Coin",
+                              head: "KYC Token Request Approved", // dear sir
+                              info: `The request with id #${
+                                token._id
+                              } has been approved. To view more details: `, //description
+                              url: `http://${
+                                req.headers.host
+                              }/transaction/my-transactions` // request details
+                            })
+                          };
+
+                          SendEmail(mailOptions, res, token);
+                        });
                         saveCommission(commissionFields, token);
                       } else if (commission.type === "RCC") {
                         let rcc = (token.rcc * commission.percentage) / 100;
 
                         let commissionFields = {
+                          requestId: token._id,
                           user: token.user,
                           percentage: commission.percentage,
                           rcc
                         };
 
+                        User.findById(token.user).then(user => {
+                          const mailOptions = {
+                            from: "noreply@ramaunitedcoin.io",
+                            to: user.email,
+                            subject: "Rama United Coin! #New Request",
+                            html: compileRequestStatusTempalte.render({
+                              title: "Rama United Coin",
+                              head: "KYC Token Request Approved", // dear sir
+                              info: `The request with id #${
+                                token._id
+                              } has been approved. To view more details: `, //description
+                              url: `http://${
+                                req.headers.host
+                              }/transaction/my-transactions` // request details
+                            })
+                          };
+
+                          SendEmail(mailOptions, res, token);
+                        });
                         saveCommission(commissionFields, token, res);
                       }
                     }

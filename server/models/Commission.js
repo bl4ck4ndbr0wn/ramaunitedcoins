@@ -7,6 +7,10 @@ const CommissionSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "users"
   },
+  requestId: {
+    type: Schema.Types.ObjectId,
+    ref: "request"
+  },
   percentage: {
     type: Number,
     default: 0,
